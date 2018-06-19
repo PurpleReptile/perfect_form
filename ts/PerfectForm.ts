@@ -1,30 +1,65 @@
 class PerfectForm {
-    private nameForm:string;
+    private _nameForm: string;
+    private _placeForm: any;
 
-    constructor(_nameForm: string) {
-        this.nameForm = _nameForm;
+    constructor(nameForm: string, placeForm: any) {
+        this._nameForm = nameForm;
+        this._placeForm = placeForm;
+    }
+
+    public includeForm(): any {
+        $.ajax({
+            type: 'post',
+            url: '../php/main.php',
+            data: `&nameForm=${this._nameForm}`,
+            dataType: 'json',
+            success: this.includeFormSuccess,
+            error: this.includeFormError,
+        });
+    }
+    private includeFormSuccess(response: any): any {
+        if (response.status == "success") {
+            $(`[data-pf-place="${response.nameForm}"]`).html(response.form);
+            console.log(response);
+        }
+        else {
+            console.log(response.msg);
+        }
+    }
+    private includeFormError(jqXHR: any): any {
+        console.log(jqXHR);
     }
 }
 
 $(document).ready(function() {
 
-    $("#openForm").click(function() {
+    $("[data-pf-open]").click(function() {
         let nameForm = $(this).data("pfName");
+        let placeForForm = '[data-pf-place="${nameForm}"]';
 
-        $.ajax({
-            type: 'post',
-            url: '../php/main.php',
-            data: '&hi=hi',
-            dataType: 'json',
-            success: function(response) {
-                console.log(response);
-            },
-            error: function(jqXHR) {
-                console.log(jqXHR);
-            }
+        let pf = new PerfectForm(nameForm, placeForForm);
+        pf.includeForm();
+
+        $("body").unbind("submit");
+        $("body").bind("submit",`#${nameForm}`, function (event) {
+            event.preventDefault();
+            console.log("form submited");
+        });
+    });
 
 
-        })
-        // $("[data-pf-place]").html();
-    })
+
+    // $("body").bind("submit", function(e) {
+    //     e.preventDefault();
+    //
+    //     // $("#bsForm").submit(function(e) {
+    //     //     e.preventDefault();
+    //     //     console.log($(this).attr("id"));
+    //     // });
+    //
+    // });
+    // $("#bsForm").bind("submit", function(e) {
+    //     e.preventDefault();
+    //     console.log($(this));
+    // });
 });

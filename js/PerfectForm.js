@@ -1,25 +1,42 @@
 "use strict";
-var PerfectForm = /** @class */ (function () {
-    function PerfectForm(_nameForm) {
-        this.nameForm = _nameForm;
+class PerfectForm {
+    constructor(nameForm, placeForm) {
+        this._nameForm = nameForm;
+        this._placeForm = placeForm;
     }
-    return PerfectForm;
-}());
-$(document).ready(function () {
-    $("#openForm").click(function () {
-        var nameForm = $(this).data("pfName");
+    includeForm() {
         $.ajax({
             type: 'post',
             url: '../php/main.php',
-            data: '&hi=hi',
+            data: `&nameForm=${this._nameForm}`,
             dataType: 'json',
-            success: function (response) {
-                console.log(response);
-            },
-            error: function (jqXHR) {
-                console.log(jqXHR);
-            }
+            success: this.includeFormSuccess,
+            error: this.includeFormError,
         });
-        // $("[data-pf-place]").html();
+    }
+    includeFormSuccess(response) {
+        if (response.status == "success") {
+            $(`[data-pf-place="${response.nameForm}"]`).html(response.form);
+            console.log(response);
+        }
+        else {
+            console.log(response.msg);
+        }
+    }
+    includeFormError(jqXHR) {
+        console.log(jqXHR);
+    }
+}
+$(document).ready(function () {
+    $("[data-pf-open]").click(function () {
+        let nameForm = $(this).data("pfName");
+        let placeForForm = '[data-pf-place="${nameForm}"]';
+        let pf = new PerfectForm(nameForm, placeForForm);
+        pf.includeForm();
+        $("body").unbind("submit");
+        $("body").bind("submit", `#${nameForm}`, function (event) {
+            event.preventDefault();
+            console.log("form submited");
+        });
     });
 });
