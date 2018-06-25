@@ -4,13 +4,34 @@
     <meta charset="UTF-8">
     <title>Perfect Form</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </head>
 <body style="background-color: black;">
 
     <button id="openForm" data-pf-open data-pf-name="bsForm">Open</button>
-    <div data-pf-place="bsForm"></div>
+    <div data-pf-place="bsForm"
+         style="display: flex;
+                 justify-content: center;"></div>
 
-
+    <p style="color: white;">Date: <input type="text" id="datepicker"></p>
     <script src="js/PerfectForm.js"></script>
+    <script src="js/datapicker-ru.js"></script>
+    <script>
+        $( function() {
+            $( "#datepicker" ).datepicker({
+                altFormat: "yy-mm-dd"
+            });
+            $.datepicker.setDefaults( $.datepicker.regional[ "ru" ] );
+
+            $("#datepicker").on("change", function() {
+               console.log($(this).datepicker("getDate"));
+               console.log($("#datepicker").val());
+            });
+        } );
+
+
+    </script>
 </body>
 </html>

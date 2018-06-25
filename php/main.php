@@ -3,21 +3,66 @@
 require_once "lib/PerfectForm.php";
 
 
-$nameForm = $_POST["nameForm"];
-$response = [];
-
-$pf = new PerfectForm($nameForm);
-
-if ($pf->includeForm())
+if ($_SERVER["REQUEST_METHOD"] == "POST")
 {
-    $response["status"] = "success";
-    $response["form"] = $pf->getContentForm();
-    $response["nameForm"] = $nameForm;
+    if (!empty($_POST["typeRequest"]))
+    {
+        $typeRequest = testInput($_POST["typeRequest"]);
+        $response = [];
+
+        switch ($typeRequest)
+        {
+            case "includeForm":
+                $response = includeForm();
+                break;
+            case "sendForm":
+                break;
+
+            default:
+                break;
+        }
+    }
+    echo json_encode($response);
 }
-else
+//else
+//{
+//
+//}
+
+// получение содержимого формы для проекта
+function includeForm()
 {
-    $response["status"] = "error";
-    $response["msg"] = "Ошибка: файл с именем " . $nameForm . " не найден.";
+    $nameForm = $_POST["nameForm"];
+    $response = [];
+
+    $pf = new PerfectForm($nameForm);
+
+    if ($pf->includeForm())
+    {
+        $response["status"] = "success";
+        $response["form"] = $pf->getTplForm();
+        $response["nameForm"] = $nameForm;
+    }
+    else
+    {
+        $response["status"] = "error";
+        $response["msg"] = "Ошибка: файл с именем " . $nameForm . " не найден.";
+    }
+
+    return $response;
 }
 
-echo json_encode($response);
+// отправка данных формы на сервер
+function sendForm()
+{
+
+}
+
+
+function testInput($data)
+{
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+}
