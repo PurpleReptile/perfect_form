@@ -1,6 +1,8 @@
 "use strict";
 class PerfectForm {
     constructor(nameForm, placeForm) {
+        this.typeIncludeForm = "includeForm";
+        this.typeSendMsg = "sendMessage";
         this._nameForm = nameForm;
         this._placeForm = placeForm;
         this._urlConn = '../php/main.php';
@@ -9,7 +11,7 @@ class PerfectForm {
         $.ajax({
             type: 'post',
             url: this._urlConn,
-            data: `&nameForm=${this._nameForm}&typeRequest=includeForm`,
+            data: `&nameForm=${this._nameForm}&typeRequest=${this.typeIncludeForm}`,
             dataType: 'json',
             success: this.includeFormSuccess,
             error: this.includeFormError,
@@ -18,7 +20,6 @@ class PerfectForm {
     includeFormSuccess(response) {
         if (response.status == "success") {
             $(`[data-pf-place="${response.nameForm}"]`).html(response.form);
-            console.log(response);
         }
         else {
             console.log(response.msg);
@@ -31,14 +32,25 @@ class PerfectForm {
         $.ajax({
             type: 'post',
             url: this._urlConn,
-            data: `${data}&typeRequest=sendForm`,
+            data: `${data}&typeRequest=${this.typeSendMsg}&${this._nameForm}`,
             dataType: 'json',
-            success: function (response) {
-            }
+            success: this.mailFormSuccess,
+            error: this.mailFormError
         });
     }
+    mailFormSuccess(response) {
+        if (response.status == "success") {
+            console.log("message was send");
+        }
+        else {
+            console.log(response.msg);
+        }
+    }
+    mailFormError(jqXHR) {
+        console.log(jqXHR);
+    }
 }
-$(document).ready(function () {
+$(function () {
     $("[data-pf-open]").click(function () {
         let nameForm = $(this).data("pfName");
         let placeForForm = `[data-pf-place="${nameForm}"]`;
@@ -55,10 +67,13 @@ $(document).ready(function () {
                     data = {};
                     switch ($(this).attr("type")) {
                         case "text":
-                            data = {
-                                type: "text",
-                                value: $(this).val()
-                            };
+                            if ($(this).val()) {
+                                data = {
+                                    type: "text",
+                                    value: $(this).val(),
+                                    required: $(this).attr("required")
+                                };
+                            }
                             break;
                         case "range":
                             data = {
@@ -80,6 +95,7 @@ $(document).ready(function () {
                         dataToServer.push(data);
                 });
                 console.log(dataToServer);
+                pf.sendDataForm(dataToServer);
             }
         });
         $("body").bind("keyup", `#${nameForm}`, function (event) {

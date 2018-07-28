@@ -3,35 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>Perfect Form</title>
+
+    <link rel="stylesheet" href="./css/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </head>
-<body style="background-color: black;">
+<body>
 
-    <button id="openForm" data-pf-open data-pf-name="bsForm">Open</button>
-    <div data-pf-place="bsForm"
-         style="display: flex;
-                 justify-content: center;"></div>
+<div class="container">
+    <div class="row">
+        <button class="btn btn-primary pull-right" data-pf-open data-pf-name="bsForm">Открыть форму</button>
+    </div>
+</div>
 
-    <p style="color: white;">Date: <input type="text" id="datepicker"></p>
-    <script src="js/PerfectForm.js"></script>
-    <script src="js/datapicker-ru.js"></script>
-    <script>
-        $( function() {
-            $( "#datepicker" ).datepicker({
-                altFormat: "yy-mm-dd"
-            });
-            $.datepicker.setDefaults( $.datepicker.regional[ "ru" ] );
-
-            $("#datepicker").on("change", function() {
-               console.log($(this).datepicker("getDate"));
-               console.log($("#datepicker").val());
-            });
-        } );
+<!--<button id="openForm" data-pf-open data-pf-name="bsForm">Open</button>-->
+<div data-pf-place="bsForm"
+     style="display: flex;
+                justify-content: center;"></div>
 
 
-    </script>
+<script type="text/javascript" src="js/PerfectForm.js"></script>
+<script type="text/javascript" src="js/datapicker-ru.js"></script>
+
+
 </body>
 </html>

@@ -3,17 +3,21 @@ class PerfectForm {
     private _placeForm: any;
     private _urlConn: string;
 
+    readonly typeIncludeForm = "includeForm";
+    readonly typeSendMsg = "sendMessage";
+
     constructor(nameForm: string, placeForm: any) {
         this._nameForm = nameForm;
         this._placeForm = placeForm;
         this._urlConn = '../php/main.php';
     }
 
+    // подключение формы в проект
     public includeForm(): any {
         $.ajax({
             type: 'post',
             url: this._urlConn,
-            data: `&nameForm=${this._nameForm}&typeRequest=includeForm`,
+            data: `&nameForm=${this._nameForm}&typeRequest=${this.typeIncludeForm}`,
             dataType: 'json',
             success: this.includeFormSuccess,
             error: this.includeFormError,
@@ -22,7 +26,6 @@ class PerfectForm {
     private includeFormSuccess(response: any): any {
         if (response.status == "success") {
             $(`[data-pf-place="${response.nameForm}"]`).html(response.form);
-            console.log(response);
         }
         else {
             console.log(response.msg);
@@ -32,20 +35,31 @@ class PerfectForm {
         console.log(jqXHR);
     }
 
+    // отправка данных на сервер
     public sendDataForm(data: string): any {
         $.ajax({
             type: 'post',
             url: this._urlConn,
-            data: `${data}&typeRequest=sendForm`,
+            data: `${data}&typeRequest=${this.typeSendMsg}&${this._nameForm}`,
             dataType: 'json',
-            success: function(response) {
-
-            }
+            success: this.mailFormSuccess,
+            error: this.mailFormError
         });
+    }
+    private mailFormSuccess(response: any): any {
+        if (response.status == "success") {
+            console.log("message was send");
+        }
+        else {
+            console.log(response.msg);
+        }
+    }
+    private mailFormError(jqXHR: any): any {
+        console.log(jqXHR);
     }
 }
 
-$(document).ready(function() {
+$(function() {
 
     $("[data-pf-open]").click(function() {
         let nameForm = $(this).data("pfName");
@@ -54,7 +68,7 @@ $(document).ready(function() {
         let pf = new PerfectForm(nameForm, placeForForm);
         pf.includeForm();
 
-        // удаление старых событий
+        // delete old binds
         $("body").unbind("submit");
         $("body").unbind("keyup");
 
@@ -63,20 +77,20 @@ $(document).ready(function() {
             let data = {};
 
             event.preventDefault();
-            // let data = $(this).serialize();
+
             if ($(event.target).is(`form#${nameForm}`)) {
 
                 $.each($(event.target.children).find("input"), function() {
                     data = {};
-                    // console.log("type is " + $(this).attr("type") + " value is " + $(this).val());
-                    // console.log($(this));
-
                     switch ($(this).attr("type")) {
                         case "text":
-                            data = {
-                                type: "text",
-                                value: $(this).val()
-                            };
+                            if ($(this).val()) {
+                                data = {
+                                    type: "text",
+                                    value: $(this).val(),
+                                    required: $(this).attr("required")
+                                };
+                            }
                             break;
                         case "range":
                             data = {
@@ -98,14 +112,13 @@ $(document).ready(function() {
                     if (!$.isEmptyObject(data))
                         dataToServer.push(data);
                 });
-                // console.log(JSON.stringify(dataToServer));
                 console.log(dataToServer);
+                pf.sendDataForm(dataToServer);
             }
 
         });
         $("body").bind("keyup", `#${nameForm}`, function(event) {
             // console.log(event.key)
-        })
+        });
     });
-
 });
