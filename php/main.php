@@ -26,7 +26,6 @@ class Form
 {
     private $response;
     private $nameForm;
-    private $data;
     private $dataToServer;
 
     public function getResponse()
@@ -47,21 +46,21 @@ class Form
 
         if ($pf->includeForm())
         {
-            $response["status"] = "success";
-            $response["form"] = $pf->getTplForm();
-            $response["nameForm"] = $this->nameForm;
+            $this->response["status"] = "success";
+            $this->response["form"] = $pf->getTplForm();
+            $this->response["nameForm"] = $this->nameForm;
         }
         else
         {
-            $response["status"] = "error";
-            $response["msg"] = "Ошибка: файл с именем " . $this->nameForm . " не найден.";
+            $this->response["status"] = "error";
+            $this->response["msg"] = "Ошибка: файл с именем " . $this->nameForm . " не найден.";
         }
     }
 
     // отправка данных формы на сервер
-    private function sendForm()
+    public function sendForm()
     {
-        $pf = new PerfectForm($this->nameForm, $this->data);
+        $pf = new PerfectForm($this->nameForm, $this->dataToServer);
         if ($pf->sendMsg()) {
             $this->response["status"] = "success";
         }

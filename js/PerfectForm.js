@@ -1,17 +1,18 @@
 "use strict";
 class PerfectForm {
     constructor(nameForm, placeForm) {
-        this.typeIncludeForm = "includeForm";
-        this.typeSendMsg = "sendMessage";
+        this.typeRequestIncludeForm = "includeForm";
+        this.typeRequestSendMsg = "sendMessage";
         this._nameForm = nameForm;
         this._placeForm = placeForm;
         this._urlConn = '../php/main.php';
+        this._dataToServer = {};
     }
     includeForm() {
         $.ajax({
             type: 'post',
             url: this._urlConn,
-            data: `&nameForm=${this._nameForm}&typeRequest=${this.typeIncludeForm}`,
+            data: `&nameForm=${this._nameForm}&typeRequest=${this.typeRequestIncludeForm}`,
             dataType: 'json',
             success: this.includeFormSuccess,
             error: this.includeFormError,
@@ -29,10 +30,15 @@ class PerfectForm {
         console.log(jqXHR);
     }
     sendDataForm(data) {
+        this._dataToServer = {
+            toSend: data,
+            typeRequest: this.typeRequestSendMsg,
+            nameForm: this._nameForm
+        };
         $.ajax({
             type: 'post',
             url: this._urlConn,
-            data: `${data}&typeRequest=${this.typeSendMsg}&${this._nameForm}`,
+            data: this._dataToServer,
             dataType: 'json',
             success: this.mailFormSuccess,
             error: this.mailFormError

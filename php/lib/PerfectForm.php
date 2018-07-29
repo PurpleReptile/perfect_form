@@ -10,7 +10,7 @@ class PerfectForm
     public function __construct()
     {
         $argv = func_get_args();
-        switch( func_num_args() ) {
+        switch (func_num_args()) {
             case 1:
                 self::__construct1($argv[0]);
                 break;
@@ -29,7 +29,9 @@ class PerfectForm
     function __construct2($nameForm, $dataForm)
     {
         $this->nameForm = $nameForm;
+        json_decode($dataForm);
         $this->dataForm = $dataForm;
+
     }
 
     public function getTplForm()
@@ -41,8 +43,7 @@ class PerfectForm
     public function includeForm()
     {
         $filename = "../tmp/" . $this->nameForm . ".html";
-        if (file_exists($filename))
-        {
+        if (file_exists($filename)) {
             $this->tplForm = file_get_contents($filename);
             return true;
         }
@@ -52,7 +53,6 @@ class PerfectForm
     public function sendMsg()
     {
 
-//  valid data
         $message = '
             <html>
             <head>
@@ -74,7 +74,7 @@ class PerfectForm
             </body>
             </html>';
 
-        $headers  = 'MIME-Version: 1.0' . "\r\n";
+        $headers = 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 
         mail($this->settingsMail["email"]["to"],
@@ -86,38 +86,32 @@ class PerfectForm
         return true;
     }
 
-    function getSettings()
+    private function getSettings()
     {
         $dir = "../settings/";
         $fileSettings = "";
 
-        if (file_exists($dir))
-        {
+        if (file_exists($dir)) {
             $fileSettings .= $dir . "sendForm.json";
 
-            if (file_exists($fileSettings))
-            {
+            if (file_exists($fileSettings)) {
                 $settings = file_get_contents($fileSettings);
 
                 if (!empty($settings))
                     $this->settingsMail = json_decode($settings, true);
-                else
-                {
+                else {
                     $this->settingsMail = $this->writeDefaultSettingsInFile();
                 }
-            }
-            else
+            } else
                 $this->createFileSettings($dir);
-        }
-        else
-        {
+        } else {
             mkdir($dir, 0777, true);
             $this->createFileSettings($dir);
         }
     }
 
     // создание файла с настройками отправки письма
-    function createFileSettings($rootPath)
+    private function createFileSettings($rootPath)
     {
         $path = $rootPath . "sendForm.json";
         $file = fopen($path, "w");
@@ -125,42 +119,45 @@ class PerfectForm
         fclose($file);
     }
 
-    function addFileReport($message)
+    private function addFileReport($message)
     {
         $dir = "/report_mail/";
-        $currTime = date("dd.m.Y-H:i") . ".txt";
-        $filename = $dir . $currTime;
+        $filename = date("d.m.Y-H:i") . ".txt";
 
         if (!file_exists($dir))
             mkdir($dir, 0777, true);
 
-        $this->createFileReport($filename, $message);
+        $this->createFileReport($dir . $filename, $message);
     }
 
     // создание файла с содержимым письма
-    function createFileReport($filename, $message)
+    private function createFileReport($filename, $message)
     {
         $file = fopen($filename, "w");
-        fwrite($file, $message);
-        fclose($file);
+        if ($file) {
+            fwrite($file, $message);
+            fclose($file);
+        }
     }
 
-    function writeDefaultSettingsInFile()
+    private function writeDefaultSettingsInFile()
     {
         $settings = '{"email":
             {
-                "to": "ig.evg.po@gmail.com",
+                "to": "ig.poyarkoff@yandex.ru",
                 "subject": "the subject"
             }
         }';
+//        "to": "ig.evg.po@gmail.com",
         return $settings;
     }
 
-    function dataValidation($jsonData) {
+    private function dataValidation($jsonData)
+    {
         return json_decode($jsonData);
     }
 
-    function validInpEmail($email)
+    private function validInpEmail($email)
     {
         return filter_var($email, FILTER_VALIDATE_EMAIL);
     }

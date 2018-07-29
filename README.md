@@ -16,9 +16,9 @@
 
 ### 2. Data - атрибуты
 
-1. data-pf-open 
-2. data-pf-name="NameForm"
-3. data-pf-place="NameForm"
+1. **data-pf-open** 
+2. **data-pf-name**="NameForm"
+3. **data-pf-place**="NameForm"
 
 где NameForm - название вызываемой формы. 
 
