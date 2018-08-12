@@ -1,17 +1,23 @@
 class PerfectForm {
-    private _nameForm: string;
-    private _placeForm: any;
-    private _urlConn: string;
-    private _dataToServer: object;
 
     readonly typeRequestIncludeForm = "includeForm";
     readonly typeRequestSendMsg = "sendMessage";
+    readonly _urlConn = '../php/main.php';
+    readonly _nameForm: string;
+
+    private _placeForm: any;
+    private _dataToServer: object;
+    private _dataFields: object;
+
+    set setDataFields(data: any) {
+        this._dataFields = data;
+    }
 
     constructor(nameForm: string, placeForm: any) {
         this._nameForm = nameForm;
         this._placeForm = placeForm;
-        this._urlConn = '../php/main.php';
         this._dataToServer = {};
+        this._dataFields = {};
     }
 
     // подключение формы в проект
@@ -27,12 +33,10 @@ class PerfectForm {
     }
 
     private includeFormSuccess(response: any): any {
-        if (response.status == "success") {
+        if (response.status == "success")
             $(`[data-pf-place="${response.nameForm}"]`).html(response.form);
-        }
-        else {
+        else
             console.log(response.msg);
-        }
     }
 
     private includeFormError(jqXHR: any): any {
@@ -40,14 +44,14 @@ class PerfectForm {
     }
 
     // отправка данных на сервер
-    public sendDataForm(data: any): any {
+    public sendDataForm(): any {
         this._dataToServer = {
-            toSend: data,
+            toSend: this._dataFields,
             typeRequest: this.typeRequestSendMsg,
             nameForm: this._nameForm
         };
 
-        // console.log(this._dataToServer);
+        console.log(this._dataToServer);
         $.ajax({
             type: 'post',
             url: this._urlConn,
@@ -70,6 +74,13 @@ class PerfectForm {
     private mailFormError(jqXHR: any): any {
         console.log(jqXHR);
     }
+
+    public prepareDataToServer(formObj: any, typeField: string | undefined): any {
+
+        let data = {};
+        console.log(formObj);
+    }
+
 }
 
 $(function () {
@@ -79,59 +90,103 @@ $(function () {
         let placeForForm = `[data-pf-place="${nameForm}"]`;
 
         let pf = new PerfectForm(nameForm, placeForForm);
+
+        // подключение формы
         pf.includeForm();
 
         // delete old binds
         $("body").unbind("submit");
         $("body").unbind("keyup");
 
+        // отправка формы
         $("body").bind("submit", `#${nameForm}`, function (event) {
-            let dataToServer: any = [];
-            let data = {};
+            let data: any = [];
+            let dataElem: any = [];
 
             event.preventDefault();
 
             if ($(event.target).is(`form#${nameForm}`)) {
 
-                $.each($(event.target.children).find("input"), function () {
-                    data = {};
-                    switch ($(this).attr("type")) {
+                $.each($(event.target.children).find("input"), function (ind, item) {
+                    switch ($(this).attr('type')) {
                         case "text":
-                            if ($(this).val()) {
-                                data = {
-                                    type: "text",
-                                    value: $(this).val(),
-                                    required: $(this).attr("required")
-                                };
-                            }
+                            if ($(item).attr('data-pf-field') == 'date')
+                                dataElem = prepareField($(item), "date");
+                            else
+                                dataElem = prepareField($(item), "text");
                             break;
-                        case "range":
-                            data = {
-                                type: "range",
-                                value: $(this).val(),
-                                min: $(this).attr("min"),
-                                max: $(this).attr("max")
-                            };
-                            break;
-                        case "file":
-                            if (($(this)[0].files.length) > 0) {
-                                data = {
-                                    files: $(this)[0].files
-                                };
-                            }
+                        case "email":   dataElem = prepareField($(item), "email"); break;
+                        case "range":   dataElem = prepareFieldRange($(item)); break;
+                        case "file":    dataElem = prepareFieldFile($(item)); break;
+                        default:
                             break;
                     }
 
-                    if (!$.isEmptyObject(data))
-                        dataToServer.push(data);
-                });
-                console.log(dataToServer);
-                pf.sendDataForm(dataToServer);
-            }
+                    if (dataElem) {
+                        data.push(dataElem);
+                    }
+                }
 
+                if (!$.isEmptyObject(data)) {
+                    pf.setDataFields = data;
+                    pf.sendDataForm();
+                }
+                    // pf.sendDataForm(data);
+            }
         });
+
+        // валидация данных
+        // TODO: реализовать валидацию полей "налету"
         $("body").bind("keyup", `#${nameForm}`, function (event) {
             // console.log(event.key)
         });
     });
+
+        $("#sendMesage").click(function(e) {
+           e.preventDefault();
+           console.log("ok");
+
+            $.ajax({
+                type: "post",
+                url: "../php/testMail.php",
+                // data: "data",
+                // dataType: "json",
+                success: function (response) {
+                    alert("ok");
+                }
+            });
+        });
+
+    // получение данных из любого текстового поля формы
+    function prepareField(elem: any, typeField: string) {
+        if (elem.val()) {
+            return {
+                type: typeField,
+                value: elem.val(),
+                required: elem.attr("required"),
+                typeFieldPF: elem.attr("data-pf-field")
+            };
+        }
+    }
+
+    // получение данных из поля формы типа "диапазон"
+    function prepareFieldRange(elem: any) {
+        return {
+            type: "range",
+            value: elem.val(),
+            min: elem.attr("min"),
+            max: elem.attr("max")
+        };
+    }
+
+    // получение данных из поля формы типа "файл"
+    function prepareFieldFile(elem: any) {
+        if ((elem[0].files.length) > 0) {
+            return {
+                files: $(this)[0].files
+            };
+        }
+    }
+
 });
+

@@ -1,11 +1,19 @@
 <?php
 
+require_once 'DefaultSettings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/tmp/mail/tmpMail.php';
+
+use Template\Message\ModelPF as ModelPF;
+use Template\Message\ViewPF as ViewPF;
+
 class PerfectForm
 {
-    private $nameForm;
-    private $tplForm;
-    private $dataForm;
-    private $settingsMail;
+    private $nameForm;          /** @var string - название переменной */
+    private $tplForm;           /** @var string - шаблон формы (front-end) */
+    private $dataForm;          /** @var array - данные формы */
+    private $msg;               /** @var array - сообщение письма*/
+    private $settingsMail;      /** @var array - настройки письма */
+    private $email;             /** @var string - e-mail */
 
     public function __construct()
     {
@@ -18,7 +26,7 @@ class PerfectForm
                 self::__construct2($argv[0], $argv[1]);
                 break;
         }
-        $this->getSettings();
+
     }
 
     function __construct1($nameForm)
@@ -29,17 +37,23 @@ class PerfectForm
     function __construct2($nameForm, $dataForm)
     {
         $this->nameForm = $nameForm;
-        json_decode($dataForm);
         $this->dataForm = $dataForm;
-
+        $this->msg = [];
     }
 
+    /**
+     * @method - получение шаблона формы
+     * @return mixed
+     */
     public function getTplForm()
     {
         return $this->tplForm;
     }
 
-    // include form to the project
+    /**
+     * @method bool - подключение формы в проект
+     * @return bool
+     */
     public function includeForm()
     {
         $filename = "../tmp/" . $this->nameForm . ".html";
@@ -50,43 +64,36 @@ class PerfectForm
         return false;
     }
 
+    /**
+     * @method bool - отправка письма
+     * @return bool
+     */
     public function sendMsg()
     {
+        $this->dataValidation();
+        $this->settingsMail = $this->getSettingsForSubmit();
 
-        $message = '
-            <html>
-            <head>
-              <title>Birthday Reminders for August</title>
-            </head>
-            <body>
-              <p>Here are the birthdays upcoming in August!</p>
-              <table>
-                <tr>
-                  <th>Person</th><th>Day</th><th>Month</th><th>Year</th>
-                </tr>
-                <tr>
-                  <td>Johny</td><td>10th</td><td>August</td><td>1970</td>
-                </tr>
-                <tr>
-                  <td>Sally</td><td>17th</td><td>August</td><td>1973</td>
-                </tr>
-              </table>
-            </body>
-            </html>';
+        $modelPF = new ModelPF($this->msg);
+        $viewPF = new ViewPF($modelPF);
+        $msg = $viewPF->output();
 
         $headers = 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        $emailTo = (!empty($this->email)) ? $this->email : $this->settingsMail["email"]["to"];
 
-        mail($this->settingsMail["email"]["to"],
+        mail($emailTo,
             $this->settingsMail["email"]["subject"],
-            $message,
+            $msg,
             $headers);
 
-        $this->addFileReport($message);
+        $this->addFileReport();
         return true;
     }
 
-    private function getSettings()
+    /**
+     * @method void - получение настройки для отправки письма
+     */
+    private function getSettingsForSubmit()
     {
         $dir = "../settings/";
         $fileSettings = "";
@@ -98,9 +105,10 @@ class PerfectForm
                 $settings = file_get_contents($fileSettings);
 
                 if (!empty($settings))
-                    $this->settingsMail = json_decode($settings, true);
+                    return json_decode($settings, true);
                 else {
-                    $this->settingsMail = $this->writeDefaultSettingsInFile();
+                    $this->createFileSettings($dir);
+                    return json_decode(DefaultSettings::$email, true);
                 }
             } else
                 $this->createFileSettings($dir);
@@ -108,57 +116,74 @@ class PerfectForm
             mkdir($dir, 0777, true);
             $this->createFileSettings($dir);
         }
+        return false;
     }
 
-    // создание файла с настройками отправки письма
+    /**
+     * @method void - создание файла с настройками отправки письма
+     * @param string $rootPath - корневая директория для файла
+     */
     private function createFileSettings($rootPath)
     {
         $path = $rootPath . "sendForm.json";
         $file = fopen($path, "w");
-        fwrite($file, $this->writeDefaultSettingsInFile());
+        fwrite($file, DefaultSettings::$email);
         fclose($file);
     }
 
-    private function addFileReport($message)
+    /**
+     * @method void - добавление файла с содержимым письма в проект
+     */
+    private function addFileReport()
     {
-        $dir = "/report_mail/";
-        $filename = date("d.m.Y-H:i") . ".txt";
+        $dir = $_SERVER['DOCUMENT_ROOT'] . "/report_mail/";
+        $filename = date("d.m.Y-H.i") . ".txt";
 
         if (!file_exists($dir))
             mkdir($dir, 0777, true);
 
-        $this->createFileReport($dir . $filename, $message);
-    }
 
-    // создание файла с содержимым письма
-    private function createFileReport($filename, $message)
-    {
-        $file = fopen($filename, "w");
+        $file = fopen($dir . $filename, "w");
         if ($file) {
-            fwrite($file, $message);
+            foreach ($this->msg as $key => $value) {
+                fwrite($file, $value["text"] . "\n");
+            }
+
             fclose($file);
         }
     }
 
-    private function writeDefaultSettingsInFile()
+    // TODO доделать валидацию элементов и добавление их в письмо
+    private function dataValidation()
     {
-        $settings = '{"email":
-            {
-                "to": "ig.poyarkoff@yandex.ru",
-                "subject": "the subject"
+        $this->msg = [];
+
+        foreach ($this->dataForm as $key => $item) {
+            switch ($item['typeFieldPF']) {
+                case "email":
+                    $this->msg[$key]["text"] = "E-mail: " . filter_var($item['value'], FILTER_VALIDATE_EMAIL);
+                    $this->email = $item['value'];
+                    break;
+                case "firstname":
+                    $this->msg[$key]["text"] = "Имя: " . $item['value'];
+                    break;
+                case "lastname":
+                    $this->msg[$key]["text"] = "Фамилия: " . $item['value'];
+                    break;
+                case "fullname":
+                    $this->msg[$key]["text"] = "ФИО: " . $item['value'];
+                    break;
+                case "phone":
+                    $this->msg[$key]["text"] = "Телефон: " . $item['value'];
+                    break;
+                case "date":
+                    $this->msg[$key]["text"] =  "Дата: " . $item['value'];
+                    break;
+                default:
+                    break;
             }
-        }';
-//        "to": "ig.evg.po@gmail.com",
-        return $settings;
+            $this->msg[$key]["type"] = DefaultSettings::$p;
+        }
     }
 
-    private function dataValidation($jsonData)
-    {
-        return json_decode($jsonData);
-    }
-
-    private function validInpEmail($email)
-    {
-        return filter_var($email, FILTER_VALIDATE_EMAIL);
-    }
 }

@@ -1,13 +1,18 @@
 <form id="bsForm" method="post" class="form" style="">
-    <p><input type="text" name="firstName" value="name" required></p>
-    <p><input type="text" value="phone number"></p>
+    <p><input type="text" data-pf-field="firstname" name="firstName" value="firstName" required></p>
+    <p><input type="text" data-pf-field="lastname" name="lastName" value="lastName" required></p>
+    <p><input type="text" data-pf-field="fullname" name="fullName" value="fullName" required></p>
+    <p><input type="text" data-pf-field="phone" value="phone number"></p>
+    <p><input type="email" data-pf-field="email" value="ig.evg.po@gmail.com"></p>
+    <!--<p><textarea data-pf-field="comment" cols="30" rows="10"></textarea></p>-->
     <p>Введите число от 1 до 10</p>
     <p><input type="range" min="1" max="10"></p>
     <p>File upload: <input type="file" multiple></p>
-    <p>Date: <input type="text" id="datepicker"></p>
+    <p>Date: <input type="text" data-pf-field="date" id="datepicker"></p>
     <p><input type="submit" value="submit"></p>
 </form>
 
+<!-- добавление datapicker -->
 <script>
     $(function() {
         $("#datepicker").datepicker();

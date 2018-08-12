@@ -3,10 +3,14 @@ class PerfectForm {
     constructor(nameForm, placeForm) {
         this.typeRequestIncludeForm = "includeForm";
         this.typeRequestSendMsg = "sendMessage";
+        this._urlConn = '../php/main.php';
         this._nameForm = nameForm;
         this._placeForm = placeForm;
-        this._urlConn = '../php/main.php';
         this._dataToServer = {};
+        this._dataFields = {};
+    }
+    set setDataFields(data) {
+        this._dataFields = data;
     }
     includeForm() {
         $.ajax({
@@ -19,22 +23,21 @@ class PerfectForm {
         });
     }
     includeFormSuccess(response) {
-        if (response.status == "success") {
+        if (response.status == "success")
             $(`[data-pf-place="${response.nameForm}"]`).html(response.form);
-        }
-        else {
+        else
             console.log(response.msg);
-        }
     }
     includeFormError(jqXHR) {
         console.log(jqXHR);
     }
-    sendDataForm(data) {
+    sendDataForm() {
         this._dataToServer = {
-            toSend: data,
+            toSend: this._dataFields,
             typeRequest: this.typeRequestSendMsg,
             nameForm: this._nameForm
         };
+        console.log(this._dataToServer);
         $.ajax({
             type: 'post',
             url: this._urlConn,
@@ -55,6 +58,10 @@ class PerfectForm {
     mailFormError(jqXHR) {
         console.log(jqXHR);
     }
+    prepareDataToServer(formObj, typeField) {
+        let data = {};
+        console.log(formObj);
+    }
 }
 $(function () {
     $("[data-pf-open]").click(function () {
@@ -65,46 +72,77 @@ $(function () {
         $("body").unbind("submit");
         $("body").unbind("keyup");
         $("body").bind("submit", `#${nameForm}`, function (event) {
-            let dataToServer = [];
-            let data = {};
+            let data = [];
+            let dataElem = [];
             event.preventDefault();
             if ($(event.target).is(`form#${nameForm}`)) {
-                $.each($(event.target.children).find("input"), function () {
-                    data = {};
-                    switch ($(this).attr("type")) {
+                $.each($(event.target.children).find("input"), function (ind, item) {
+                    switch ($(this).attr('type')) {
                         case "text":
-                            if ($(this).val()) {
-                                data = {
-                                    type: "text",
-                                    value: $(this).val(),
-                                    required: $(this).attr("required")
-                                };
-                            }
+                            if ($(item).attr('data-pf-field') == 'date')
+                                dataElem = prepareField($(item), "date");
+                            else
+                                dataElem = prepareField($(item), "text");
+                            break;
+                        case "email":
+                            dataElem = prepareField($(item), "email");
                             break;
                         case "range":
-                            data = {
-                                type: "range",
-                                value: $(this).val(),
-                                min: $(this).attr("min"),
-                                max: $(this).attr("max")
-                            };
+                            dataElem = prepareFieldRange($(item));
                             break;
                         case "file":
-                            if (($(this)[0].files.length) > 0) {
-                                data = {
-                                    files: $(this)[0].files
-                                };
-                            }
+                            dataElem = prepareFieldFile($(item));
+                            break;
+                        default:
                             break;
                     }
-                    if (!$.isEmptyObject(data))
-                        dataToServer.push(data);
+                    if (dataElem) {
+                        data.push(dataElem);
+                    }
                 });
-                console.log(dataToServer);
-                pf.sendDataForm(dataToServer);
+                if (!$.isEmptyObject(data)) {
+                    pf.setDataFields = data;
+                    pf.sendDataForm();
+                }
             }
         });
         $("body").bind("keyup", `#${nameForm}`, function (event) {
         });
     });
+    $("#sendMesage").click(function (e) {
+        e.preventDefault();
+        console.log("ok");
+        $.ajax({
+            type: "post",
+            url: "../php/testMail.php",
+            success: function (response) {
+                alert("ok");
+            }
+        });
+    });
+    function prepareField(elem, typeField) {
+        if (elem.val()) {
+            return {
+                type: typeField,
+                value: elem.val(),
+                required: elem.attr("required"),
+                typeFieldPF: elem.attr("data-pf-field")
+            };
+        }
+    }
+    function prepareFieldRange(elem) {
+        return {
+            type: "range",
+            value: elem.val(),
+            min: elem.attr("min"),
+            max: elem.attr("max")
+        };
+    }
+    function prepareFieldFile(elem) {
+        if ((elem[0].files.length) > 0) {
+            return {
+                files: $(this)[0].files
+            };
+        }
+    }
 });
