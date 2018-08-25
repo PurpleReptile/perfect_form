@@ -2,20 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ca1d63d7-ba56-49e1-ba61-085c8e3a2bd2" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/php/lib/DefaultSettings.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php/testMail.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tmp/mail/template.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tmp/mail/tmpMail.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/php/lib/TemplateMail.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/PerfectForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/PerfectForm.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/lib/Mail.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/php/lib/PerfectForm.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/lib/PerfectForm.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/php/main.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/main.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings/mail.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings/sendForm.json" beforeDir="false" afterPath="$PROJECT_DIR$/settings/sendForm.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tmp/bsForm.html" beforeDir="false" afterPath="$PROJECT_DIR$/tmp/bsForm.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tmp/mail/template.php" beforeDir="false" afterPath="$PROJECT_DIR$/tmp/mail/TemplateMail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tmp/mail/tmpMail.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/ts/PerfectForm.ts" beforeDir="false" afterPath="$PROJECT_DIR$/ts/PerfectForm.ts" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -74,24 +69,29 @@
     <session id="2073452101">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="10" />
+          <entry key="project.closed" value="16" />
           <entry key="project.open.time.101" value="1" />
+          <entry key="project.open.time.127" value="1" />
+          <entry key="project.open.time.129" value="1" />
           <entry key="project.open.time.13" value="1" />
-          <entry key="project.open.time.131" value="1" />
+          <entry key="project.open.time.131" value="2" />
           <entry key="project.open.time.14" value="1" />
           <entry key="project.open.time.17" value="1" />
           <entry key="project.open.time.18" value="1" />
           <entry key="project.open.time.190" value="1" />
           <entry key="project.open.time.23" value="1" />
+          <entry key="project.open.time.36" value="1" />
           <entry key="project.open.time.365" value="1" />
+          <entry key="project.open.time.43" value="1" />
+          <entry key="project.open.time.45" value="1" />
           <entry key="project.open.time.76" value="1" />
           <entry key="project.open.time.99" value="1" />
-          <entry key="project.opened" value="11" />
+          <entry key="project.opened" value="17" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.js.language.service.starts">
         <counts>
-          <entry key="TypeScriptServerServiceImpl" value="10" />
+          <entry key="TypeScriptServerServiceImpl" value="12" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -99,8 +99,9 @@
           <entry key="html" value="4" />
           <entry key="js" value="1" />
           <entry key="json" value="4" />
-          <entry key="php" value="15" />
-          <entry key="ts" value="2" />
+          <entry key="md" value="1" />
+          <entry key="php" value="19" />
+          <entry key="ts" value="3" />
           <entry key="txt" value="7" />
         </counts>
       </usages-collector>
@@ -109,27 +110,28 @@
           <entry key="HTML" value="4" />
           <entry key="JSON" value="4" />
           <entry key="JavaScript" value="1" />
-          <entry key="PHP" value="15" />
+          <entry key="Markdown" value="1" />
+          <entry key="PHP" value="19" />
           <entry key="PLAIN_TEXT" value="7" />
-          <entry key="TypeScript" value="2" />
+          <entry key="TypeScript" value="3" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="html" value="335" />
+          <entry key="html" value="831" />
           <entry key="json" value="1" />
-          <entry key="php" value="5302" />
-          <entry key="ts" value="2685" />
+          <entry key="php" value="7359" />
+          <entry key="ts" value="2786" />
           <entry key="txt" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="HTML" value="344" />
+          <entry key="HTML" value="840" />
           <entry key="JSON" value="1" />
-          <entry key="PHP" value="5293" />
+          <entry key="PHP" value="7350" />
           <entry key="PLAIN_TEXT" value="1" />
-          <entry key="TypeScript" value="2685" />
+          <entry key="TypeScript" value="2786" />
         </counts>
       </usages-collector>
     </session>
@@ -140,7 +142,7 @@
         <entry file="file://$PROJECT_DIR$/tmp/bsForm.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="230">
-              <caret line="10" column="32" selection-start-line="10" selection-start-column="32" selection-end-line="10" selection-end-column="32" />
+              <caret line="10" column="37" selection-start-line="10" selection-start-column="37" selection-end-line="10" selection-end-column="37" />
               <folding>
                 <element signature="n#script#0;n#!!top" />
               </folding>
@@ -148,11 +150,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="161">
-              <caret line="21" column="4" selection-start-line="21" selection-start-column="4" selection-end-line="21" selection-end-column="4" />
+            <state relative-caret-position="109">
+              <caret line="38" column="10" selection-start-line="38" selection-start-column="10" selection-end-line="38" selection-end-column="10" />
               <folding>
                 <element signature="n#style#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
               </folding>
@@ -160,21 +162,17 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ts/PerfectForm.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="92">
-              <caret line="152" column="36" lean-forward="true" selection-start-line="152" selection-start-column="36" selection-end-line="152" selection-end-column="36" />
+            <state relative-caret-position="966">
+              <caret line="60" column="37" selection-start-line="60" selection-start-column="37" selection-end-line="60" selection-end-column="37" />
               <folding>
                 <element signature="n#!!block;n#setDataFields#0;n#PerfectForm#0" />
                 <element signature="n#!!block;n#includeForm#0;n#PerfectForm#0" />
                 <element signature="n#!!block;n#includeFormSuccess#0;n#PerfectForm#0" />
                 <element signature="n#!!block;n#includeFormError#0;n#PerfectForm#0" />
-                <element signature="n#!!block;n#mailFormSuccess#0;n#PerfectForm#0" />
                 <element signature="n#!!block;n#prepareDataToServer#0;n#PerfectForm#0" />
-                <element signature="e#4800#5052#0" />
-                <element signature="e#5150#5312#0" />
-                <element signature="e#5405#5540#0" />
               </folding>
             </state>
           </provider>
@@ -183,23 +181,18 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/php/lib/PerfectForm.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="69">
-              <caret line="169" column="32" lean-forward="true" selection-start-line="169" selection-start-column="32" selection-end-line="169" selection-end-column="32" />
+            <state relative-caret-position="1633">
+              <caret line="173" column="41" selection-start-line="173" selection-end-line="174" />
               <folding>
-                <element signature="e#110#150#0#PHP" expanded="true" />
                 <element signature="n#__construct#0;n#PerfectForm#0;n#!!top" />
                 <element signature="n#__construct1#0;n#PerfectForm#0;n#!!top" />
                 <element signature="n#__construct2#0;n#PerfectForm#0;n#!!top" />
-                <element signature="e#779#852#0#PHP" />
                 <element signature="n#getTplForm#0;n#PerfectForm#0;n#!!top" />
-                <element signature="e#869#949#0#PHP" />
+                <element signature="n#getTplMessage#0;n#PerfectForm#0;n#!!top" />
                 <element signature="n#includeForm#0;n#PerfectForm#0;n#!!top" />
-                <element signature="e#1163#1232#0#PHP" />
-                <element signature="e#1660#1733#0#PHP" />
+                <element signature="n#sendMsg#0;n#PerfectForm#0;n#!!top" />
                 <element signature="n#getSettingsForSubmit#0;n#PerfectForm#0;n#!!top" />
-                <element signature="e#3213#3354#0#PHP" />
                 <element signature="n#createFileSettings#0;n#PerfectForm#0;n#!!top" />
-                <element signature="e#3634#3721#0#PHP" />
                 <element signature="n#addFileReport#0;n#PerfectForm#0;n#!!top" />
               </folding>
             </state>
@@ -207,28 +200,41 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/php/testMail.php">
+        <entry file="file://$PROJECT_DIR$/php/lib/DefaultSettings.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="115">
-              <caret line="5" column="34" lean-forward="true" selection-start-line="5" selection-start-column="34" selection-end-line="5" selection-end-column="34" />
+            <state relative-caret-position="299">
+              <caret line="13" column="29" selection-start-line="13" selection-start-column="29" selection-end-line="13" selection-end-column="29" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tmp/mail/tmpMail.php">
+        <entry file="file://$PROJECT_DIR$/php/main.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="551">
-              <caret line="62" column="47" lean-forward="true" selection-start-line="62" selection-start-column="47" selection-end-line="62" selection-end-column="47" />
+            <state relative-caret-position="437">
+              <caret line="19" column="20" selection-start-line="19" selection-start-column="20" selection-end-line="19" selection-end-column="20" />
+              <folding>
+                <element signature="n#__construct#0;n#Form#0;n#!!top" />
+                <element signature="n#includeForm#0;n#Form#0;n#!!top" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tmp/mail/template.php">
+        <entry file="file://$PROJECT_DIR$/tmp/mail/TemplateMail.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="207">
-              <caret line="9" column="7" lean-forward="true" selection-start-line="9" selection-start-column="7" selection-end-line="9" selection-end-column="7" />
+              <caret line="26" column="16" selection-start-line="26" selection-start-column="16" selection-end-line="26" selection-end-column="16" />
+              <folding>
+                <element signature="n#table#0;n#body#0;n#html#0;n#!!top" />
+                <element signature="n#style#0;n#table#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#table#1;n#body#0;n#html#0;n#!!top" />
+                <element signature="n#style#0;n#div#0;n#td#1;n#tr#0;n#table#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#a#0;n#td#0;n#tr#0;n#table#0;n#div#0;n#td#1;n#tr#0;n#table#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#a#0;n#p#0;n#td#0;n#tr#0;n#table#0;n#td#0;n#tr#0;n#table#0;n#td#0;n#tr#0;n#table#0;n#div#0;n#td#1;n#tr#0;n#table#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#table#2;n#body#0;n#html#0;n#!!top" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -242,6 +248,10 @@
       <find>_dataToServer</find>
       <find>dataForm</find>
       <find>settingsMail</find>
+      <find>btn</find>
+      <find>soc-btn</find>
+      <find>body-w</find>
+      <find>data</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -265,18 +275,20 @@
         <option value="$PROJECT_DIR$/test/test.php" />
         <option value="$PROJECT_DIR$/tmp_mail/template.php" />
         <option value="$PROJECT_DIR$/tmp_mail/tmpMail.php" />
-        <option value="$PROJECT_DIR$/php/main.php" />
         <option value="$PROJECT_DIR$/tmp/tmp_mail/tmpMail.php" />
-        <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/php/testMail.php" />
-        <option value="$PROJECT_DIR$/tmp/mail/template.php" />
         <option value="$PROJECT_DIR$/tmp/mail/tmpMail.php" />
-        <option value="$PROJECT_DIR$/php/lib/PerfectForm.php" />
         <option value="$PROJECT_DIR$/report_mail/01.08.2018-20.25.txt" />
         <option value="$PROJECT_DIR$/php/lib/DefaultSettings.php" />
         <option value="$PROJECT_DIR$/settings/sendForm.json" />
         <option value="$PROJECT_DIR$/tmp/bsForm.html" />
+        <option value="$PROJECT_DIR$/tmp/mail/template.php" />
+        <option value="$PROJECT_DIR$/php/main.php" />
         <option value="$PROJECT_DIR$/ts/PerfectForm.ts" />
+        <option value="$PROJECT_DIR$/tmp/mail/TemplateMail.html" />
+        <option value="$PROJECT_DIR$/php/lib/PerfectForm.php" />
+        <option value="$PROJECT_DIR$/php/lib/TemplateMail.php" />
+        <option value="$PROJECT_DIR$/index.html" />
       </list>
     </option>
   </component>
@@ -644,6 +656,7 @@
       <path value="$PROJECT_DIR$/node_modules/strip-ansi/package.json" />
       <path value="$PROJECT_DIR$/node_modules/strip-eof/package.json" />
       <path value="$PROJECT_DIR$/node_modules/supports-color/package.json" />
+      <path value="$PROJECT_DIR$/node_modules/sweetalert2/package.json" />
       <path value="$PROJECT_DIR$/node_modules/tapable/package.json" />
       <path value="$PROJECT_DIR$/node_modules/through/package.json" />
       <path value="$PROJECT_DIR$/node_modules/through2/package.json" />
@@ -702,14 +715,14 @@
       <path value="$PROJECT_DIR$/node_modules/yargs/package.json" />
     </packageJsonPaths>
   </component>
-  <component name="PhpDebugGeneral" hide_empty_superglobals="false" listening_started="true" />
+  <component name="PhpDebugGeneral" hide_empty_superglobals="false" listening_started="true" notify_if_session_was_finished_without_being_paused="false" />
   <component name="PhpServers">
     <servers>
       <server host="localhost" id="316b8f24-a249-474f-8e5a-664d7631b8c6" name="localhost" port="9000" />
       <server host="localhost" id="14424e03-081a-4012-a856-c2244f8665c3" name="localhost (1)" />
     </servers>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="65" />
     <option name="y" value="25" />
     <option name="width" value="1855" />
@@ -720,6 +733,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -741,11 +755,6 @@
             <path>
               <item name="perfect_form" type="b2602c69:ProjectViewProjectNode" />
               <item name="perfect_form" type="462c0819:PsiDirectoryNode" />
-              <item name="report_mail" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="perfect_form" type="b2602c69:ProjectViewProjectNode" />
-              <item name="perfect_form" type="462c0819:PsiDirectoryNode" />
               <item name="settings" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -756,13 +765,18 @@
             <path>
               <item name="perfect_form" type="b2602c69:ProjectViewProjectNode" />
               <item name="perfect_form" type="462c0819:PsiDirectoryNode" />
+              <item name="tmp" type="462c0819:PsiDirectoryNode" />
+              <item name="mail" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="perfect_form" type="b2602c69:ProjectViewProjectNode" />
+              <item name="perfect_form" type="462c0819:PsiDirectoryNode" />
               <item name="ts" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -871,12 +885,18 @@
       <workItem from="1533454577825" duration="1937000" />
       <workItem from="1533747184902" duration="90000" />
       <workItem from="1533747554253" duration="1678000" />
-      <workItem from="1534060609447" duration="19762000" />
+      <workItem from="1534060609447" duration="20176000" />
+      <workItem from="1534090529078" duration="2536000" />
+      <workItem from="1534437640539" duration="6780000" />
+      <workItem from="1534445619477" duration="2726000" />
+      <workItem from="1534612244939" duration="1199000" />
+      <workItem from="1534682401003" duration="2836000" />
+      <workItem from="1535173267979" duration="1211000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="55070000" />
+    <option name="totallyTimeSpent" value="72772000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -888,16 +908,37 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="7" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.59520453" visible="true" weight="0.22021419" />
-      <window_info id="Structure" order="1" sideWeight="0.4047955" side_tool="true" weight="0.22021419" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.59379405" visible="true" weight="0.20080322" />
+      <window_info id="Structure" order="1" sideWeight="0.40620592" side_tool="true" weight="0.22556894" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32863188" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4991699" weight="0.32936078" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4986165" weight="0.6177715" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4986165" weight="0.52750355" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32863188" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="TypeScript" order="9" weight="0.32863188" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" sideWeight="0.4997233" visible="true" weight="0.44428772" />
+      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5013835" side_tool="true" weight="0.4513399" />
+      <window_info anchor="bottom" id="Version Control" order="12" weight="0.32722145" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Database" order="3" />
+    </layout>
+    <layout-to-restore>
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.59379405" visible="true" weight="0.19812584" />
+      <window_info id="Structure" order="1" sideWeight="0.40620592" side_tool="true" weight="0.22556894" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32863188" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4991699" weight="0.32936078" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4986165" weight="0.52750355" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32863188" />
@@ -911,7 +952,7 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Database" order="3" />
-    </layout>
+    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -924,17 +965,15 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="main.php">
+        <watch expression="$item" />
+        <watch expression="$this-&gt;message" />
+      </configuration>
+    </watches-manager>
+  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="387">
-            <caret line="22" column="36" selection-start-line="22" selection-start-column="36" selection-end-line="22" selection-end-column="36" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/@types/jquery/index.d.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
@@ -965,134 +1004,122 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/settings/mail.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="138">
-          <caret line="6" column="118" lean-forward="true" selection-start-line="6" selection-start-column="118" selection-end-line="6" selection-end-column="118" />
-          <folding>
-            <element signature="n#style#0;n#p#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#p#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#p#2;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tmp/mail/tmpMail.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="551">
-          <caret line="62" column="47" lean-forward="true" selection-start-line="62" selection-start-column="47" selection-end-line="62" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/report_mail/01.08.2018-20.25.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/report_mail/02.08.2018-19.20.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/report_mail/02.08.2018-19.24.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="138">
-          <caret line="6" column="39" lean-forward="true" selection-start-line="6" selection-start-column="39" selection-end-line="6" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/report_mail/12.08.2018-15.57.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/php/lib/DefaultSettings.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="115">
-          <caret line="5" column="13" lean-forward="true" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/settings/mail.html" />
+    <entry file="file://$PROJECT_DIR$/report_mail/01.08.2018-20.25.txt" />
+    <entry file="file://$PROJECT_DIR$/report_mail/02.08.2018-19.20.txt" />
+    <entry file="file://$PROJECT_DIR$/report_mail/02.08.2018-19.24.txt" />
+    <entry file="file://$PROJECT_DIR$/report_mail/12.08.2018-15.57.txt" />
     <entry file="file://$PROJECT_DIR$/settings/sendForm.json">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/tmp/mail/template.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="9" column="7" lean-forward="true" selection-start-line="9" selection-start-column="7" selection-end-line="9" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/tmp/mail/tmpMail.php" />
     <entry file="file://$PROJECT_DIR$/php/testMail.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="115">
-          <caret line="5" column="34" lean-forward="true" selection-start-line="5" selection-start-column="34" selection-end-line="5" selection-end-column="34" />
+        <state relative-caret-position="92">
+          <caret line="4" column="28" lean-forward="true" selection-start-line="4" selection-start-column="28" selection-end-line="4" selection-end-column="28" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/php/main.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="529">
-          <caret line="66" column="40" selection-start-line="66" selection-start-column="40" selection-end-line="66" selection-end-column="40" />
-          <folding>
-            <element signature="n#setResponse#0;n#Form#0;n#!!top" />
-            <element signature="n#testInput#0;n#Form#0;n#!!top" />
-          </folding>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="FIRST">
+          <first_editor relative-caret-position="157">
+            <caret line="18" column="20" lean-forward="true" selection-start-line="18" selection-start-column="20" selection-end-line="18" selection-end-column="20" />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/index.html">
+    <entry file="file://$PROJECT_DIR$/php/lib/TemplateMail.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="21" column="4" selection-start-line="21" selection-start-column="4" selection-end-line="21" selection-end-column="4" />
-          <folding>
-            <element signature="n#style#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
+        <state relative-caret-position="230">
+          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tmp/bsForm.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="230">
-          <caret line="10" column="32" selection-start-line="10" selection-start-column="32" selection-end-line="10" selection-end-column="32" />
+          <caret line="10" column="37" selection-start-line="10" selection-start-column="37" selection-end-line="10" selection-end-column="37" />
           <folding>
             <element signature="n#script#0;n#!!top" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/php/lib/PerfectForm.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="69">
-          <caret line="169" column="32" lean-forward="true" selection-start-line="169" selection-start-column="32" selection-end-line="169" selection-end-column="32" />
-          <folding>
-            <element signature="e#110#150#0#PHP" expanded="true" />
-            <element signature="n#__construct#0;n#PerfectForm#0;n#!!top" />
-            <element signature="n#__construct1#0;n#PerfectForm#0;n#!!top" />
-            <element signature="n#__construct2#0;n#PerfectForm#0;n#!!top" />
-            <element signature="e#779#852#0#PHP" />
-            <element signature="n#getTplForm#0;n#PerfectForm#0;n#!!top" />
-            <element signature="e#869#949#0#PHP" />
-            <element signature="n#includeForm#0;n#PerfectForm#0;n#!!top" />
-            <element signature="e#1163#1232#0#PHP" />
-            <element signature="e#1660#1733#0#PHP" />
-            <element signature="n#getSettingsForSubmit#0;n#PerfectForm#0;n#!!top" />
-            <element signature="e#3213#3354#0#PHP" />
-            <element signature="n#createFileSettings#0;n#PerfectForm#0;n#!!top" />
-            <element signature="e#3634#3721#0#PHP" />
-            <element signature="n#addFileReport#0;n#PerfectForm#0;n#!!top" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ts/PerfectForm.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="92">
-          <caret line="152" column="36" lean-forward="true" selection-start-line="152" selection-start-column="36" selection-end-line="152" selection-end-column="36" />
+        <state relative-caret-position="966">
+          <caret line="60" column="37" selection-start-line="60" selection-start-column="37" selection-end-line="60" selection-end-column="37" />
           <folding>
             <element signature="n#!!block;n#setDataFields#0;n#PerfectForm#0" />
             <element signature="n#!!block;n#includeForm#0;n#PerfectForm#0" />
             <element signature="n#!!block;n#includeFormSuccess#0;n#PerfectForm#0" />
             <element signature="n#!!block;n#includeFormError#0;n#PerfectForm#0" />
-            <element signature="n#!!block;n#mailFormSuccess#0;n#PerfectForm#0" />
             <element signature="n#!!block;n#prepareDataToServer#0;n#PerfectForm#0" />
-            <element signature="e#4800#5052#0" />
-            <element signature="e#5150#5312#0" />
-            <element signature="e#5405#5540#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/php/lib/PerfectForm.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1633">
+          <caret line="173" column="41" selection-start-line="173" selection-end-line="174" />
+          <folding>
+            <element signature="n#__construct#0;n#PerfectForm#0;n#!!top" />
+            <element signature="n#__construct1#0;n#PerfectForm#0;n#!!top" />
+            <element signature="n#__construct2#0;n#PerfectForm#0;n#!!top" />
+            <element signature="n#getTplForm#0;n#PerfectForm#0;n#!!top" />
+            <element signature="n#getTplMessage#0;n#PerfectForm#0;n#!!top" />
+            <element signature="n#includeForm#0;n#PerfectForm#0;n#!!top" />
+            <element signature="n#sendMsg#0;n#PerfectForm#0;n#!!top" />
+            <element signature="n#getSettingsForSubmit#0;n#PerfectForm#0;n#!!top" />
+            <element signature="n#createFileSettings#0;n#PerfectForm#0;n#!!top" />
+            <element signature="n#addFileReport#0;n#PerfectForm#0;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/php/lib/DefaultSettings.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="299">
+          <caret line="13" column="29" selection-start-line="13" selection-start-column="29" selection-end-line="13" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/php/main.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="437">
+          <caret line="19" column="20" selection-start-line="19" selection-start-column="20" selection-end-line="19" selection-end-column="20" />
+          <folding>
+            <element signature="n#__construct#0;n#Form#0;n#!!top" />
+            <element signature="n#includeForm#0;n#Form#0;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tmp/mail/TemplateMail.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="26" column="16" selection-start-line="26" selection-start-column="16" selection-end-line="26" selection-end-column="16" />
+          <folding>
+            <element signature="n#table#0;n#body#0;n#html#0;n#!!top" />
+            <element signature="n#style#0;n#table#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#table#1;n#body#0;n#html#0;n#!!top" />
+            <element signature="n#style#0;n#div#0;n#td#1;n#tr#0;n#table#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#a#0;n#td#0;n#tr#0;n#table#0;n#div#0;n#td#1;n#tr#0;n#table#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#a#0;n#p#0;n#td#0;n#tr#0;n#table#0;n#td#0;n#tr#0;n#table#0;n#td#0;n#tr#0;n#table#0;n#div#0;n#td#1;n#tr#0;n#table#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#table#2;n#body#0;n#html#0;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="109">
+          <caret line="38" column="10" selection-start-line="38" selection-start-column="10" selection-end-line="38" selection-end-column="10" />
+          <folding>
+            <element signature="n#style#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>

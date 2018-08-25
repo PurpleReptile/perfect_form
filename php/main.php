@@ -7,10 +7,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && !empty($_POST["typeRequest"])) {
     $form = new Form();
 
     if (!isset($_POST['nameForm'])) {
-        $form->setResponse([
-            'status' => 'error',
-            'msg' => 'название формы не было передано на сервер'
-        ]);
+        $form->setResponse('status', 'error');
+        $form->setResponse('message', 'название формы не было передано на сервер');
     } else {
         switch ($_POST["typeRequest"]) {
             case "includeForm":
@@ -28,56 +26,57 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && !empty($_POST["typeRequest"])) {
     }
 }
 
-    class Form
+class Form
+{
+    private $response;
+
+    public function getResponse()
     {
-        private $response;
+        return $this->response;
+    }
 
-        public function getResponse()
-        {
-            return $this->response;
-        }
+    public function setResponse($type, $value)
+    {
+        $this->response[$type] = $value;
+    }
 
-        public function setResponse($value)
-        {
-            $this->response = $value;
-        }
+    public function __construct()
+    {
+    }
 
-        public function __construct()
-        {
-        }
+    // получение содержимого формы для проекта
+    public function includeForm($nameForm)
+    {
+        $pf = new PerfectForm($nameForm);
 
-        // получение содержимого формы для проекта
-        public function includeForm($nameForm)
-        {
-            $pf = new PerfectForm($nameForm);
-
-            if ($pf->includeForm()) {
-                $this->response["status"] = "success";
-                $this->response["form"] = $pf->getTplForm();
-                $this->response["nameForm"] = $nameForm;
-            } else {
-                $this->response["status"] = "error";
-                $this->response["msg"] = "Ошибка: файл с именем " . $nameForm . " не найден.";
-            }
-        }
-
-        // отправка данных формы на сервер
-        public function sendForm($nameForm, $dataMsg)
-        {
-            $pf = new PerfectForm($nameForm, $dataMsg);
-            if ($pf->sendMsg()) {
-                $this->response["status"] = "success";
-            }
-        }
-
-        private function testInput($data)
-        {
-            $data = trim($data);
-            $data = stripslashes($data);
-            $data = htmlspecialchars($data);
-            return $data;
+        if ($pf->includeForm()) {
+            $this->response["status"] = "success";
+            $this->response["form"] = $pf->getTplForm();
+            $this->response["nameForm"] = $nameForm;
+        } else {
+            $this->response["status"] = "error";
+            $this->response["msg"] = "Ошибка: файл с именем " . $nameForm . " не найден.";
         }
     }
+
+    // отправка данных формы на сервер
+    public function sendForm($nameForm, $dataMsg)
+    {
+        $pf = new PerfectForm($nameForm, $dataMsg);
+        if ($pf->sendMsg()) {
+            $this->response["status"] = "success";
+            $this->response['message'] = $pf->getTplMessage();
+        }
+    }
+
+    private function testInput($data)
+    {
+        $data = trim($data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data);
+        return $data;
+    }
+}
 
 
 

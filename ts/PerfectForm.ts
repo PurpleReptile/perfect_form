@@ -64,6 +64,7 @@ class PerfectForm {
 
     private mailFormSuccess(response: any): any {
         if (response.status == "success") {
+            $('#mail-place').html(response.message);
             console.log("message was send");
         }
         else {
@@ -142,20 +143,20 @@ $(function () {
         });
     });
 
-        $("#sendMesage").click(function(e) {
-           e.preventDefault();
-           console.log("ok");
+    $("#sendMesage").click(function(e) {
+       e.preventDefault();
+       console.log("ok");
 
-            $.ajax({
-                type: "post",
-                url: "../php/testMail.php",
-                // data: "data",
-                // dataType: "json",
-                success: function (response) {
-                    alert("ok");
-                }
-            });
+        $.ajax({
+            type: "post",
+            url: "../php/testMail.php",
+            // data: "data",
+            // dataType: "json",
+            success: function (response) {
+                alert("ok");
+            }
         });
+    });
 
     // получение данных из любого текстового поля формы
     function prepareField(elem: any, typeField: string) {
@@ -164,7 +165,7 @@ $(function () {
                 type: typeField,
                 value: elem.val(),
                 required: elem.attr("required"),
-                typeFieldPF: elem.attr("data-pf-field")
+                typeField: elem.attr("data-pf-field")
             };
         }
     }
@@ -175,7 +176,8 @@ $(function () {
             type: "range",
             value: elem.val(),
             min: elem.attr("min"),
-            max: elem.attr("max")
+            max: elem.attr("max"),
+            typeField: "range"
         };
     }
 
@@ -184,6 +186,7 @@ $(function () {
         if ((elem[0].files.length) > 0) {
             return {
                 files: $(this)[0].files
+                typeField: files
             };
         }
     }

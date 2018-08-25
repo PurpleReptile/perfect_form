@@ -1,19 +1,20 @@
 <?php
 
 require_once 'DefaultSettings.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/tmp/mail/tmpMail.php';
+require_once 'TemplateMail.php';
 
-use Template\Message\ModelPF as ModelPF;
-use Template\Message\ViewPF as ViewPF;
+use Templates\Mail\TemplateMail;
 
 class PerfectForm
 {
-    private $nameForm;          /** @var string - название переменной */
+    private $nameForm;          /** @var string - название формы */
     private $tplForm;           /** @var string - шаблон формы (front-end) */
+    private $tplMessage;        /** @var string - шаблон письма */
     private $dataForm;          /** @var array - данные формы */
-    private $msg;               /** @var array - сообщение письма*/
+    private $message;           /** @var array - сообщение письма*/
     private $settingsMail;      /** @var array - настройки письма */
     private $email;             /** @var string - e-mail */
+    private $errors;            /** @var array - список ошибок */
 
     public function __construct()
     {
@@ -32,13 +33,14 @@ class PerfectForm
     function __construct1($nameForm)
     {
         $this->nameForm = $nameForm;
+        $this->message = [];
     }
 
     function __construct2($nameForm, $dataForm)
     {
         $this->nameForm = $nameForm;
         $this->dataForm = $dataForm;
-        $this->msg = [];
+        $this->message = [];
     }
 
     /**
@@ -49,6 +51,15 @@ class PerfectForm
     {
         return $this->tplForm;
     }
+
+    /**
+     * @method string - получение шаблона письма
+     */
+    public function getTplMessage()
+    {
+        return $this->tplMessage;
+    }
+
 
     /**
      * @method bool - подключение формы в проект
@@ -73,20 +84,20 @@ class PerfectForm
         $this->dataValidation();
         $this->settingsMail = $this->getSettingsForSubmit();
 
-        $modelPF = new ModelPF($this->msg);
-        $viewPF = new ViewPF($modelPF);
-        $msg = $viewPF->output();
+        $TemplateMail = new TemplateMail($this->message);
+        $TemplateMail->prepareTemplate();
+        $this->tplMessage = $TemplateMail->getTemplate();
 
         $headers = 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
         $emailTo = (!empty($this->email)) ? $this->email : $this->settingsMail["email"]["to"];
 
-        mail($emailTo,
-            $this->settingsMail["email"]["subject"],
-            $msg,
-            $headers);
+//        mail($emailTo,
+//            $this->settingsMail["email"]["subject"],
+//            $msg,
+//            $headers);
 
-        $this->addFileReport();
+//        $this->addFileReport();
         return true;
     }
 
@@ -145,7 +156,7 @@ class PerfectForm
 
         $file = fopen($dir . $filename, "w");
         if ($file) {
-            foreach ($this->msg as $key => $value) {
+            foreach ($this->message as $key => $value) {
                 fwrite($file, $value["text"] . "\n");
             }
 
@@ -154,36 +165,51 @@ class PerfectForm
     }
 
     // TODO доделать валидацию элементов и добавление их в письмо
+    // TODO исправить баг с добавлением одинаковых полей даты
     private function dataValidation()
     {
-        $this->msg = [];
-
         foreach ($this->dataForm as $key => $item) {
-            switch ($item['typeFieldPF']) {
+            $correctField = false;
+
+            switch ($item['typeField']) {
                 case "email":
-                    $this->msg[$key]["text"] = "E-mail: " . filter_var($item['value'], FILTER_VALIDATE_EMAIL);
+                    $this->message[$key]["text"] = "E-mail: " . filter_var($item['value'], FILTER_VALIDATE_EMAIL);
                     $this->email = $item['value'];
+                    $correctField = true;
                     break;
                 case "firstname":
-                    $this->msg[$key]["text"] = "Имя: " . $item['value'];
+                    if (preg_match("/^\W{2,}$/", $item["value"])) {
+                        $this->message[$key]["text"] = "Имя: " . $item["value"];
+                        $correctField = true;
+                    }
+                    else
+                        $this->errors["input"]["firstname"] = "Имя пользователя введено некорректно.";
                     break;
                 case "lastname":
-                    $this->msg[$key]["text"] = "Фамилия: " . $item['value'];
+                    $this->message[$key]["text"] = "Фамилия: " . $item["value"];
+                    $correctField = true;
                     break;
                 case "fullname":
-                    $this->msg[$key]["text"] = "ФИО: " . $item['value'];
+                    $this->message[$key]["text"] = "ФИО: " . $item["value"];
+                    $correctField = true;
                     break;
                 case "phone":
-                    $this->msg[$key]["text"] = "Телефон: " . $item['value'];
+                    if (preg_match("/^[\d|\s|\-]*$/", $item["value"])) {
+                        $this->message[$key]["text"] = "Телефон: " . $item["value"];
+                        $correctField = true;
+                    }
+                    else
+                        $this->errors["input"]["phone"] = "Телефонный номер введён некорректно.";
                     break;
                 case "date":
-                    $this->msg[$key]["text"] =  "Дата: " . $item['value'];
+                    $this->message[$key]["text"] =  "Дата: " . $item['value'];
+                    $correctField = true;
                     break;
                 default:
                     break;
             }
-            $this->msg[$key]["type"] = DefaultSettings::$p;
+            if ($correctField === true)
+                $this->message[$key]["type"] = DefaultSettings::$p;
         }
     }
-
 }

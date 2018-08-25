@@ -3,17 +3,15 @@
   <component name="PhpProjectSharedConfiguration" php_language_level="7.2" />
   <component name="PhpStepFilterConfiguration">
     <skipped_functions>
-      <skipped_function name="PerfectForm-&gt;__construct2" />
+      <skipped_function name="Templates\Mail\TemplateMail-&gt;prepareTemplate" />
       <skipped_function name="PerfectForm-&gt;dataValidation" />
       <skipped_function name="PerfectForm-&gt;sendMsg" />
-      <skipped_function name="PerfectForm-&gt;getSettingsForSubmit" />
     </skipped_functions>
     <option name="skippedFunctions">
       <list>
-        <option value="PerfectForm-&gt;__construct2" />
+        <option value="Templates\Mail\TemplateMail-&gt;prepareTemplate" />
         <option value="PerfectForm-&gt;dataValidation" />
         <option value="PerfectForm-&gt;sendMsg" />
-        <option value="PerfectForm-&gt;getSettingsForSubmit" />
       </list>
     </option>
   </component>

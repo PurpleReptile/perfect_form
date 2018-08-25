@@ -49,6 +49,7 @@ class PerfectForm {
     }
     mailFormSuccess(response) {
         if (response.status == "success") {
+            $('#mail-place').html(response.message);
             console.log("message was send");
         }
         else {
@@ -126,7 +127,7 @@ $(function () {
                 type: typeField,
                 value: elem.val(),
                 required: elem.attr("required"),
-                typeFieldPF: elem.attr("data-pf-field")
+                typeField: elem.attr("data-pf-field")
             };
         }
     }
@@ -135,13 +136,15 @@ $(function () {
             type: "range",
             value: elem.val(),
             min: elem.attr("min"),
-            max: elem.attr("max")
+            max: elem.attr("max"),
+            typeField: "range"
         };
     }
     function prepareFieldFile(elem) {
         if ((elem[0].files.length) > 0) {
             return {
-                files: $(this)[0].files
+                files: $(this)[0].files,
+                typeField: files
             };
         }
     }
