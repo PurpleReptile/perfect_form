@@ -1,7 +1,7 @@
 {
   "compileOnSave": true,
   "files": [
-    "ts/PerfectForm.ts"
+    "ts/"
   ],
   "compilerOptions": {
     /* Basic Options */

@@ -2,16 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ca1d63d7-ba56-49e1-ba61-085c8e3a2bd2" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/php/lib/PrepareDataToServer.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ts/Validation.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ts/Main.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/PerfectForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/PerfectForm.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/lib/DefaultSettings.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/lib/DefaultSettings.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/lib/PerfectForm.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/lib/PerfectForm.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/main.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/main.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/Validation.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/Validation.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/main.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ts/PerfectForm.ts" beforeDir="false" afterPath="$PROJECT_DIR$/ts/PerfectForm.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ts/Validation.ts" beforeDir="false" afterPath="$PROJECT_DIR$/ts/Validation.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -151,9 +148,10 @@
         <counts>
           <entry key="dummy" value="22" />
           <entry key="gitignore" value="13" />
+          <entry key="json" value="1" />
           <entry key="md" value="1655" />
           <entry key="php" value="1975" />
-          <entry key="ts" value="2226" />
+          <entry key="ts" value="2938" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
@@ -162,17 +160,18 @@
           <entry key="Markdown" value="1655" />
           <entry key="PHP" value="1975" />
           <entry key="PLAIN_TEXT" value="22" />
-          <entry key="TypeScript" value="2226" />
+          <entry key="TypeScript" value="2938" />
+          <entry key="tsconfig" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="gitignore" value="1" />
-          <entry key="js" value="1" />
-          <entry key="json" value="1" />
+          <entry key="js" value="4" />
+          <entry key="json" value="2" />
           <entry key="md" value="3" />
           <entry key="php" value="6" />
-          <entry key="ts" value="1" />
+          <entry key="ts" value="2" />
           <entry key="txt" value="3" />
           <entry key="yml" value="1" />
         </counts>
@@ -180,13 +179,13 @@
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="Git file" value="1" />
-          <entry key="JavaScript" value="1" />
+          <entry key="JavaScript" value="4" />
           <entry key="Markdown" value="3" />
           <entry key="PHP" value="6" />
           <entry key="PLAIN_TEXT" value="3" />
-          <entry key="TypeScript" value="1" />
+          <entry key="TypeScript" value="2" />
           <entry key="YAML" value="1" />
-          <entry key="tsconfig" value="1" />
+          <entry key="tsconfig" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.php.new.class">
@@ -198,11 +197,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ts/PerfectForm.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="233">
-              <caret line="119" column="50" selection-start-line="119" selection-start-column="50" selection-end-line="119" selection-end-column="50" />
+            <state>
               <folding>
                 <element signature="n#!!block;n#setDataFields#0;n#PerfectForm#0" />
                 <element signature="n#!!block;n#constructor#0;n#PerfectForm#0" />
@@ -218,17 +216,6 @@
                 <element signature="e#2168#2218#0" />
                 <element signature="n#!!block;n#sendDataToServerError#0;n#PerfectForm#0" />
                 <element signature="n#!!block;n#prepareData#0;n#PerfectForm#0" />
-                <element signature="e#4576#4880#0" />
-                <element signature="e#4727#4743#0" />
-                <element signature="e#4818#4862#0" />
-                <element signature="e#4996#5246#0" />
-                <element signature="e#5022#5240#0" />
-                <element signature="e#5043#5229#0" />
-                <element signature="e#5344#5538#0" />
-                <element signature="e#5361#5531#0" />
-                <element signature="e#5631#5799#0" />
-                <element signature="e#5673#5793#0" />
-                <element signature="e#5694#5782#0" />
               </folding>
             </state>
           </provider>
@@ -237,8 +224,54 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ts/Validation.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="213">
-              <caret line="18" column="38" lean-forward="true" selection-start-line="18" selection-start-column="38" selection-end-line="18" selection-end-column="38" />
+            <state relative-caret-position="288">
+              <caret line="28" column="25" lean-forward="true" selection-start-line="28" selection-start-column="25" selection-end-line="28" selection-end-column="25" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/ts/Main.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="384">
+              <caret line="80" lean-forward="true" selection-start-line="80" selection-end-line="80" />
+              <folding>
+                <element signature="e#0#44#0" expanded="true" />
+                <element signature="e#101#637#0" />
+                <element signature="e#718#878#0" />
+                <element signature="e#731#2036#0" />
+                <element signature="e#879#2030#0" />
+                <element signature="e#962#1883#0" />
+                <element signature="e#980#1777#0" />
+                <element signature="e#1032#1313#0" />
+                <element signature="e#1334#1445#0" />
+                <element signature="e#1466#1573#0" />
+                <element signature="e#1594#1699#0" />
+                <element signature="e#1720#1759#0" />
+                <element signature="e#1809#1869#0" />
+                <element signature="e#1925#2020#0" />
+                <element signature="e#2298#2489#0" />
+                <element signature="e#3267#3387#0" />
+                <element signature="e#2965#3215#0" />
+                <element signature="e#3675#3782#0" />
+                <element signature="e#3313#3507#0" />
+                <element signature="e#3330#3500#0" />
+                <element signature="e#4074#4159#0" />
+                <element signature="e#3600#3768#0" />
+                <element signature="e#3642#3762#0" />
+                <element signature="e#3663#3751#0" />
+                <element signature="e#3993#4051#0" />
+                <element signature="e#4032#4338#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tsconfig.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="257">
+              <caret line="30" column="8" lean-forward="true" selection-start-line="30" selection-start-column="8" selection-end-line="30" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -355,7 +388,6 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/php/PerfectForm.php" />
-        <option value="$PROJECT_DIR$/tsconfig.json" />
         <option value="$PROJECT_DIR$/js/datapicker-ru.js" />
         <option value="$PROJECT_DIR$/js/PerfectForm.js" />
         <option value="$PROJECT_DIR$/js/main..js" />
@@ -386,7 +418,9 @@
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/php/lib/PrepareDataToServer.php" />
         <option value="$PROJECT_DIR$/ts/Validation.ts" />
+        <option value="$PROJECT_DIR$/ts/Main.ts" />
         <option value="$PROJECT_DIR$/ts/PerfectForm.ts" />
+        <option value="$PROJECT_DIR$/tsconfig.json" />
       </list>
     </option>
   </component>
@@ -996,12 +1030,12 @@
       <workItem from="1534612244939" duration="1199000" />
       <workItem from="1534682401003" duration="2836000" />
       <workItem from="1535173267979" duration="1211000" />
-      <workItem from="1535610881721" duration="11904000" />
+      <workItem from="1535610881721" duration="13908000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="84676000" />
+    <option name="totallyTimeSpent" value="86680000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1028,7 +1062,7 @@
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32827735" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="TypeScript" order="9" weight="0.32863188" />
+      <window_info anchor="bottom" id="TypeScript" order="9" weight="0.40086675" />
       <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.4997233" weight="0.27952328" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5013835" side_tool="true" weight="0.4513399" />
       <window_info anchor="bottom" id="Version Control" order="12" weight="0.32722145" />
@@ -1091,13 +1125,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/php/lib/Mail.php" />
-    <entry file="file://$PROJECT_DIR$/js/PerfectForm.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="598">
-          <caret line="64" column="1" selection-start-line="64" selection-start-column="1" selection-end-line="64" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/json/json.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="222">
@@ -1168,13 +1195,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tsconfig.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="41" column="4" lean-forward="true" selection-start-line="41" selection-start-column="4" selection-end-line="41" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/php/lib/PrepareDataToServer.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="449">
@@ -1234,9 +1254,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/Validation.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/php/main.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="576">
@@ -1244,17 +1261,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ts/Validation.ts">
+    <entry file="file://$PROJECT_DIR$/js/PerfectForm.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="213">
-          <caret line="18" column="38" lean-forward="true" selection-start-line="18" selection-start-column="38" selection-end-line="18" selection-end-column="38" />
+        <state relative-caret-position="264">
+          <caret line="11" column="29" lean-forward="true" selection-start-line="11" selection-start-column="29" selection-end-line="11" selection-end-column="29" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ts/PerfectForm.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="233">
-          <caret line="119" column="50" selection-start-line="119" selection-start-column="50" selection-end-line="119" selection-end-column="50" />
+        <state>
           <folding>
             <element signature="n#!!block;n#setDataFields#0;n#PerfectForm#0" />
             <element signature="n#!!block;n#constructor#0;n#PerfectForm#0" />
@@ -1270,17 +1286,62 @@
             <element signature="e#2168#2218#0" />
             <element signature="n#!!block;n#sendDataToServerError#0;n#PerfectForm#0" />
             <element signature="n#!!block;n#prepareData#0;n#PerfectForm#0" />
-            <element signature="e#4576#4880#0" />
-            <element signature="e#4727#4743#0" />
-            <element signature="e#4818#4862#0" />
-            <element signature="e#4996#5246#0" />
-            <element signature="e#5022#5240#0" />
-            <element signature="e#5043#5229#0" />
-            <element signature="e#5344#5538#0" />
-            <element signature="e#5361#5531#0" />
-            <element signature="e#5631#5799#0" />
-            <element signature="e#5673#5793#0" />
-            <element signature="e#5694#5782#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/Validation.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-336">
+          <caret line="10" column="33" lean-forward="true" selection-start-line="10" selection-start-column="33" selection-end-line="10" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tsconfig.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="257">
+          <caret line="30" column="8" lean-forward="true" selection-start-line="30" selection-start-column="8" selection-end-line="30" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ts/Validation.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="28" column="25" lean-forward="true" selection-start-line="28" selection-start-column="25" selection-end-line="28" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ts/Main.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="384">
+          <caret line="80" lean-forward="true" selection-start-line="80" selection-end-line="80" />
+          <folding>
+            <element signature="e#0#44#0" expanded="true" />
+            <element signature="e#101#637#0" />
+            <element signature="e#718#878#0" />
+            <element signature="e#731#2036#0" />
+            <element signature="e#879#2030#0" />
+            <element signature="e#962#1883#0" />
+            <element signature="e#980#1777#0" />
+            <element signature="e#1032#1313#0" />
+            <element signature="e#1334#1445#0" />
+            <element signature="e#1466#1573#0" />
+            <element signature="e#1594#1699#0" />
+            <element signature="e#1720#1759#0" />
+            <element signature="e#1809#1869#0" />
+            <element signature="e#1925#2020#0" />
+            <element signature="e#2298#2489#0" />
+            <element signature="e#3267#3387#0" />
+            <element signature="e#2965#3215#0" />
+            <element signature="e#3675#3782#0" />
+            <element signature="e#3313#3507#0" />
+            <element signature="e#3330#3500#0" />
+            <element signature="e#4074#4159#0" />
+            <element signature="e#3600#3768#0" />
+            <element signature="e#3642#3762#0" />
+            <element signature="e#3663#3751#0" />
+            <element signature="e#3993#4051#0" />
+            <element signature="e#4032#4338#0" />
           </folding>
         </state>
       </provider>

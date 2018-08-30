@@ -13,7 +13,7 @@ class Validation {
         this.valueField = valueField;
         this.exampleCorrectField = "";
     }
-    get getExmpCorrectField() {
+    get getExpCorrectField() {
         return this.exampleCorrectField;
     }
     validation() {

@@ -19,7 +19,7 @@ class Validation {
         this.exampleCorrectField = "";
     }
 
-    get getExmpCorrectField(): any {
+    get getExpCorrectField(): any {
         return this.exampleCorrectField;
     }
 
