@@ -1,31 +1,33 @@
+import { Validation } from "./Validation";
+
 class PerfectForm {
 
     readonly typeRequestIncludeForm = "includeForm";
     readonly typeRequestSendMsg = "sendMessage";
-    readonly _urlConn = '../php/main.php';
-    readonly _nameForm: string;
+    readonly urlScript = '../php/main.php';
 
-    private _placeForm: any;
-    private _dataToServer: object;
-    private _dataFields: object;
+    private nameForm: string;           /** @var - название формы */
+    private placeForm: any;             /** @var - опорный элемент для выгрузки формы в DOM */
+    private dataToServer: object;       /** @var - данные для отправки на сервер */
+    private dataFields: object;         /** @var - данные полей */
 
     set setDataFields(data: any) {
-        this._dataFields = data;
+        this.dataFields = data;
     }
 
     constructor(nameForm: string, placeForm: any) {
-        this._nameForm = nameForm;
-        this._placeForm = placeForm;
-        this._dataToServer = {};
-        this._dataFields = {};
+        this.nameForm = nameForm;
+        this.placeForm = placeForm;
+        this.dataToServer = {};
+        this.dataFields = {};
     }
 
     // подключение формы в проект
     public includeForm(): any {
         $.ajax({
             type: 'post',
-            url: this._urlConn,
-            data: `&nameForm=${this._nameForm}&typeRequest=${this.typeRequestIncludeForm}`,
+            url: this.urlScript,
+            data: `&nameForm=${this.nameForm}&typeRequest=${this.typeRequestIncludeForm}`,
             dataType: 'json',
             success: this.includeFormSuccess,
             error: this.includeFormError,
@@ -44,25 +46,25 @@ class PerfectForm {
     }
 
     // отправка данных на сервер
-    public sendDataForm(): any {
-        this._dataToServer = {
-            toSend: this._dataFields,
+    public sendDataToServer(): any {
+        this.dataToServer = {
+            toSend: this.dataFields,
             typeRequest: this.typeRequestSendMsg,
-            nameForm: this._nameForm
+            nameForm: this.nameForm
         };
 
-        console.log(this._dataToServer);
+        console.log(this.dataToServer);
         $.ajax({
             type: 'post',
-            url: this._urlConn,
-            data: this._dataToServer,
+            url: this.urlScript,
+            data: this.dataToServer,
             dataType: 'json',
-            success: this.mailFormSuccess,
-            error: this.mailFormError
+            success: this.sendDataToServerSuccess,
+            error: this.sendDataToServerError
         });
     }
 
-    private mailFormSuccess(response: any): any {
+    private sendDataToServerSuccess(response: any): any {
         if (response.status == "success") {
             $('#mail-place').html(response.message);
             console.log("message was send");
@@ -72,16 +74,14 @@ class PerfectForm {
         }
     }
 
-    private mailFormError(jqXHR: any): any {
+    private sendDataToServerError(jqXHR: any): any {
         console.log(jqXHR);
     }
 
-    public prepareDataToServer(formObj: any, typeField: string | undefined): any {
-
+    public prepareData(formObj: any, typeField: string | undefined): any {
         let data = {};
         console.log(formObj);
     }
-
 }
 
 $(function () {
@@ -89,7 +89,6 @@ $(function () {
     $("[data-pf-open]").click(function () {
         let nameForm = $(this).data("pfName");
         let placeForForm = `[data-pf-place="${nameForm}"]`;
-
         let pf = new PerfectForm(nameForm, placeForForm);
 
         // подключение формы
@@ -99,49 +98,70 @@ $(function () {
         $("body").unbind("submit");
         $("body").unbind("keyup");
 
-        // отправка формы
-        $("body").bind("submit", `#${nameForm}`, function (event) {
-            let data: any = [];
-            let dataElem: any = [];
+        // отправка данных на сервер
+        $("body").bind("submit", `#${nameForm}`, submitForm);
 
-            event.preventDefault();
-
-            if ($(event.target).is(`form#${nameForm}`)) {
-
-                $.each($(event.target.children).find("input"), function (ind, item) {
-                    switch ($(this).attr('type')) {
-                        case "text":
-                            if ($(item).attr('data-pf-field') == 'date')
-                                dataElem = prepareField($(item), "date");
-                            else
-                                dataElem = prepareField($(item), "text");
-                            break;
-                        case "email":   dataElem = prepareField($(item), "email"); break;
-                        case "range":   dataElem = prepareFieldRange($(item)); break;
-                        case "file":    dataElem = prepareFieldFile($(item)); break;
-                        default:
-                            break;
-                    }
-
-                    if (dataElem) {
-                        data.push(dataElem);
-                    }
-                }
-
-                if (!$.isEmptyObject(data)) {
-                    pf.setDataFields = data;
-                    pf.sendDataForm();
-                }
-                    // pf.sendDataForm(data);
-            }
-        });
-
-        // валидация данных
-        // TODO: реализовать валидацию полей "налету"
-        $("body").bind("keyup", `#${nameForm}`, function (event) {
-            // console.log(event.key)
-        });
+        // валидация полей формы "налету"
+        $("body").bind("keyup", `#${nameForm}`, validationForm);
     });
+
+    // отправка формы
+    function submitForm(nameForm: any, event: any, pf: PerfectForm) {
+        let data: any = [];
+        let dataElem: any = [];
+
+        event.preventDefault();
+
+        if ($(event.target).is(`form#${nameForm}`)) {
+
+            $.each($(event.target.children).find("input"), function (ind, item) {
+                switch ($(this).attr('type')) {
+                    case "text":
+                        if ($(item).attr('data-pf-field') == 'date')
+                            dataElem = prepareField($(item), "date");
+                        else
+                            dataElem = prepareField($(item), "text");
+                        break;
+                    case "email":
+                        dataElem = prepareField($(item), "email");
+                        break;
+                    case "range":
+                        dataElem = prepareFieldRange($(item));
+                        break;
+                    case "file":
+                        dataElem = prepareFieldFile($(item));
+                        break;
+                    default:
+                        break;
+                }
+
+                if (dataElem) {
+                    data.push(dataElem);
+                }
+            }
+
+            if (!$.isEmptyObject(data)) {
+                pf.setDataFields = data;
+                pf.sendDataToServer();
+            }
+        }
+    }
+
+    // валидация полей формы "налету"
+    // TODO: реализовать валидацию полей формы "налету"
+    function validationForm(nameForm: string, nameField: string, valueField: string) {
+        let valid: Validation;
+        let expCorrectField: string;
+
+        valid= new Validation(nameForm, nameField, valueField);
+
+        if (valid.validation()) {
+
+        } else {
+            expCorrectField = valid.getExmpCorrectField();
+            // $(nameField).
+        }
+    }
 
     $("#sendMesage").click(function(e) {
        e.preventDefault();

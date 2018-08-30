@@ -60,6 +60,14 @@ class PerfectForm
         return $this->tplMessage;
     }
 
+    /**
+     * @method - получение списка ошибок
+     * @return array
+     */
+    public function getErrors()
+    {
+        return $this->errors;
+    }
 
     /**
      * @method bool - подключение формы в проект
@@ -81,7 +89,7 @@ class PerfectForm
      */
     public function sendMsg()
     {
-        $this->dataValidation();
+        $this->validationAllFields();
         $this->settingsMail = $this->getSettingsForSubmit();
 
         $TemplateMail = new TemplateMail($this->message);
@@ -90,6 +98,7 @@ class PerfectForm
 
         $headers = 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+
         $emailTo = (!empty($this->email)) ? $this->email : $this->settingsMail["email"]["to"];
 
 //        mail($emailTo,
@@ -153,7 +162,6 @@ class PerfectForm
         if (!file_exists($dir))
             mkdir($dir, 0777, true);
 
-
         $file = fopen($dir . $filename, "w");
         if ($file) {
             foreach ($this->message as $key => $value) {
@@ -164,52 +172,68 @@ class PerfectForm
         }
     }
 
-    // TODO доделать валидацию элементов и добавление их в письмо
     // TODO исправить баг с добавлением одинаковых полей даты
-    private function dataValidation()
+    // TODO добавить валидацию для полей: firstname, lastname, fullname, date
+    /**
+     * @method - валидация полей формы
+     */
+    private function validationAllFields()
     {
         foreach ($this->dataForm as $key => $item) {
-            $correctField = false;
 
             switch ($item['typeField']) {
                 case "email":
-                    $this->message[$key]["text"] = "E-mail: " . filter_var($item['value'], FILTER_VALIDATE_EMAIL);
-                    $this->email = $item['value'];
-                    $correctField = true;
+                    $this->validationField($item["value"], DefaultSettings::REGEXP_EMAIL, $key, "Email");
                     break;
                 case "firstname":
-                    if (preg_match("/^\W{2,}$/", $item["value"])) {
-                        $this->message[$key]["text"] = "Имя: " . $item["value"];
-                        $correctField = true;
-                    }
-                    else
-                        $this->errors["input"]["firstname"] = "Имя пользователя введено некорректно.";
+                    $this->validationField($item["value"], DefaultSettings::REGEXP_FIRSTNAME, $key, "Имя");
                     break;
                 case "lastname":
-                    $this->message[$key]["text"] = "Фамилия: " . $item["value"];
-                    $correctField = true;
+                    $this->validationField($item["value"], DefaultSettings::REGEXP_LASTNAME, $key, "Фамилия");
                     break;
                 case "fullname":
-                    $this->message[$key]["text"] = "ФИО: " . $item["value"];
-                    $correctField = true;
+                    $this->validationField($item["value"], DefaultSettings::REGEXP_FULLNAME, $key, "ФИО");
                     break;
                 case "phone":
-                    if (preg_match("/^[\d|\s|\-]*$/", $item["value"])) {
-                        $this->message[$key]["text"] = "Телефон: " . $item["value"];
-                        $correctField = true;
-                    }
-                    else
-                        $this->errors["input"]["phone"] = "Телефонный номер введён некорректно.";
+                    $this->validationField($item["value"], DefaultSettings::REGEXP_PHONE, $key, "Телефон");
                     break;
                 case "date":
-                    $this->message[$key]["text"] =  "Дата: " . $item['value'];
-                    $correctField = true;
+                    $this->validationField($item["value"], DefaultSettings::REGEXP_DATE, $key, "Дата");
                     break;
                 default:
                     break;
             }
-            if ($correctField === true)
-                $this->message[$key]["type"] = DefaultSettings::$p;
         }
     }
+
+    /**
+     * @method - валидация поля формы
+     * @param string $valueInp - значение поля
+     * @param string $regExp - регулярное выражение
+     * @param string $fieldName - название поля
+     * @param string $lblMsg - текст для отображения письма
+     */
+    private function validationField($valueInp, $regExp, $fieldName, $lblMsg)
+    {
+        if (preg_match($regExp, $this->testInput($valueInp))) {
+            $this->message[$fieldName]["text"] = $lblMsg . ": " . $valueInp;
+            $this->message[$fieldName]["type"] = DefaultSettings::STYLE_P;
+        } else {
+            $this->errors["input"][$fieldName] = "Входные данные для поля \"" . $fieldName . "\" введены некорректно.";
+        }
+    }
+
+    /**
+     * @param $data
+     * @return string
+     */
+    private function testInput($data)
+    {
+        $data = trim($data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data);
+        return $data;
+    }
+
+
 }

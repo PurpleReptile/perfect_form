@@ -1,22 +1,24 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Validation_1 = require("./Validation");
 class PerfectForm {
     constructor(nameForm, placeForm) {
         this.typeRequestIncludeForm = "includeForm";
         this.typeRequestSendMsg = "sendMessage";
-        this._urlConn = '../php/main.php';
-        this._nameForm = nameForm;
-        this._placeForm = placeForm;
-        this._dataToServer = {};
-        this._dataFields = {};
+        this.urlScript = '../php/main.php';
+        this.nameForm = nameForm;
+        this.placeForm = placeForm;
+        this.dataToServer = {};
+        this.dataFields = {};
     }
     set setDataFields(data) {
-        this._dataFields = data;
+        this.dataFields = data;
     }
     includeForm() {
         $.ajax({
             type: 'post',
-            url: this._urlConn,
-            data: `&nameForm=${this._nameForm}&typeRequest=${this.typeRequestIncludeForm}`,
+            url: this.urlScript,
+            data: `&nameForm=${this.nameForm}&typeRequest=${this.typeRequestIncludeForm}`,
             dataType: 'json',
             success: this.includeFormSuccess,
             error: this.includeFormError,
@@ -31,23 +33,23 @@ class PerfectForm {
     includeFormError(jqXHR) {
         console.log(jqXHR);
     }
-    sendDataForm() {
-        this._dataToServer = {
-            toSend: this._dataFields,
+    sendDataToServer() {
+        this.dataToServer = {
+            toSend: this.dataFields,
             typeRequest: this.typeRequestSendMsg,
-            nameForm: this._nameForm
+            nameForm: this.nameForm
         };
-        console.log(this._dataToServer);
+        console.log(this.dataToServer);
         $.ajax({
             type: 'post',
-            url: this._urlConn,
-            data: this._dataToServer,
+            url: this.urlScript,
+            data: this.dataToServer,
             dataType: 'json',
-            success: this.mailFormSuccess,
-            error: this.mailFormError
+            success: this.sendDataToServerSuccess,
+            error: this.sendDataToServerError
         });
     }
-    mailFormSuccess(response) {
+    sendDataToServerSuccess(response) {
         if (response.status == "success") {
             $('#mail-place').html(response.message);
             console.log("message was send");
@@ -56,10 +58,10 @@ class PerfectForm {
             console.log(response.msg);
         }
     }
-    mailFormError(jqXHR) {
+    sendDataToServerError(jqXHR) {
         console.log(jqXHR);
     }
-    prepareDataToServer(formObj, typeField) {
+    prepareData(formObj, typeField) {
         let data = {};
         console.log(formObj);
     }
@@ -72,44 +74,54 @@ $(function () {
         pf.includeForm();
         $("body").unbind("submit");
         $("body").unbind("keyup");
-        $("body").bind("submit", `#${nameForm}`, function (event) {
-            let data = [];
-            let dataElem = [];
-            event.preventDefault();
-            if ($(event.target).is(`form#${nameForm}`)) {
-                $.each($(event.target.children).find("input"), function (ind, item) {
-                    switch ($(this).attr('type')) {
-                        case "text":
-                            if ($(item).attr('data-pf-field') == 'date')
-                                dataElem = prepareField($(item), "date");
-                            else
-                                dataElem = prepareField($(item), "text");
-                            break;
-                        case "email":
-                            dataElem = prepareField($(item), "email");
-                            break;
-                        case "range":
-                            dataElem = prepareFieldRange($(item));
-                            break;
-                        case "file":
-                            dataElem = prepareFieldFile($(item));
-                            break;
-                        default:
-                            break;
-                    }
-                    if (dataElem) {
-                        data.push(dataElem);
-                    }
-                });
-                if (!$.isEmptyObject(data)) {
-                    pf.setDataFields = data;
-                    pf.sendDataForm();
-                }
-            }
-        });
-        $("body").bind("keyup", `#${nameForm}`, function (event) {
-        });
+        $("body").bind("submit", `#${nameForm}`, submitForm);
+        $("body").bind("keyup", `#${nameForm}`, validationForm);
     });
+    function submitForm(nameForm, event, pf) {
+        let data = [];
+        let dataElem = [];
+        event.preventDefault();
+        if ($(event.target).is(`form#${nameForm}`)) {
+            $.each($(event.target.children).find("input"), function (ind, item) {
+                switch ($(this).attr('type')) {
+                    case "text":
+                        if ($(item).attr('data-pf-field') == 'date')
+                            dataElem = prepareField($(item), "date");
+                        else
+                            dataElem = prepareField($(item), "text");
+                        break;
+                    case "email":
+                        dataElem = prepareField($(item), "email");
+                        break;
+                    case "range":
+                        dataElem = prepareFieldRange($(item));
+                        break;
+                    case "file":
+                        dataElem = prepareFieldFile($(item));
+                        break;
+                    default:
+                        break;
+                }
+                if (dataElem) {
+                    data.push(dataElem);
+                }
+            });
+            if (!$.isEmptyObject(data)) {
+                pf.setDataFields = data;
+                pf.sendDataToServer();
+            }
+        }
+    }
+    function validationForm(nameForm, nameField, valueField) {
+        let valid;
+        let expCorrectField;
+        valid = new Validation_1.Validation(nameForm, nameField, valueField);
+        if (valid.validation()) {
+        }
+        else {
+            expCorrectField = valid.getExmpCorrectField();
+        }
+    }
     $("#sendMesage").click(function (e) {
         e.preventDefault();
         console.log("ok");
