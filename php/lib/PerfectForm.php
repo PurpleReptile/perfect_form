@@ -234,6 +234,4 @@ class PerfectForm
         $data = htmlspecialchars($data);
         return $data;
     }
-
-
 }

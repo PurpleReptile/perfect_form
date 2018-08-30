@@ -10,11 +10,20 @@ class PrepareDataToServer
 {
     private $response;
 
+    /**
+     * @method - получение ответа с сервера
+     * @return mixed - ответ с сервера
+     */
     public function getResponse()
     {
         return $this->response;
     }
 
+    /**
+     * @method - добавление параметра для ответа с сервера
+     * @param string $type - тип параметра
+     * @param string $value - значение параметра
+     */
     public function setResponse($type, $value)
     {
         $this->response[$type] = $value;
@@ -24,9 +33,8 @@ class PrepareDataToServer
     {
     }
 
-    // получение содержимого формы для проекта
-
     /**
+     * @method - получение содержимого формы для проекта
      * @method - подключение шаблона формы
      * @param string $nameForm - название формы
      */
@@ -44,9 +52,8 @@ class PrepareDataToServer
         }
     }
 
-    // отправка данных формы на сервер
-
     /**
+     * @method - отправка данных формы на сервер
      * @param string $nameForm - название формы
      * @param $dataMsg
      */
@@ -61,6 +68,4 @@ class PrepareDataToServer
             $this->response["error"] = $pf->getErrors();
         }
     }
-
-
 }
