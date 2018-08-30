@@ -68,4 +68,4 @@ class Validation {
     }
 }
 
-export { Validation }
+export {Validation}

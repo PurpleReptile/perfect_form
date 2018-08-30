@@ -60,9 +60,5 @@ class PerfectForm {
     sendDataToServerError(jqXHR) {
         console.log(jqXHR);
     }
-    prepareData(formObj, typeField) {
-        let data = {};
-        console.log(formObj);
-    }
 }
 exports.PerfectForm = PerfectForm;

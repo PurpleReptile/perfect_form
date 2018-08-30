@@ -1,5 +1,5 @@
-import { PerfectForm } from "./PerfectForm";
-import { Validation } from "./Validation";
+import {PerfectForm} from "./PerfectForm";
+import {Validation} from "./Validation";
 
 $(function () {
 

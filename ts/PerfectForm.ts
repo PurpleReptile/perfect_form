@@ -75,12 +75,7 @@ class PerfectForm {
     private sendDataToServerError(jqXHR: any): any {
         console.log(jqXHR);
     }
-
-    public prepareData(formObj: any, typeField: string | undefined): any {
-        let data = {};
-        console.log(formObj);
-    }
 }
 
-export { PerfectForm }
+export {PerfectForm}
 
