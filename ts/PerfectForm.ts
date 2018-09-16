@@ -168,7 +168,7 @@ $(function () {
         $("body").bind("keyup", `#${nameForm}`, validationForm);    // валидация полей формы "налету"
         $("body").bind("click",  `#${nameForm}`, function (event: any) {
 
-            let elem = $(event.target)[0];
+            let elem = $(event.target);
 
             // click checkbox
             if (elem.localName === "input" && elem.type === "checkbox") {
@@ -178,7 +178,6 @@ $(function () {
                     $(`form#${nameForm}`).find('[type="submit"]').attr("disabled", true);
             }
         });
-
     });
 
     /**
@@ -226,27 +225,6 @@ $(function () {
                 pf.sendDataToServer();
             }
         }
-    }
-
-    /**
-     *
-     */
-    function checkCheckbox() {
-
-
-        // console.log($(event.target.children).find(".checkbox").prop("checked"));
-
-
-        // if ($(this).input.prop("checked")) {
-        //     $(this).button.attr("disable", "true");
-        //     return true;
-        // }
-        // else {
-        //     button.attr("disable", "false");
-        //     return true;
-        // }
-
-        // return false;
     }
 
     // TODO: реализовать валидацию полей формы "налету"

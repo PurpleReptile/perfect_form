@@ -131,7 +131,7 @@ $(function () {
         $("body").bind("submit", `#${nameForm}`, submitForm);
         $("body").bind("keyup", `#${nameForm}`, validationForm);
         $("body").bind("click", `#${nameForm}`, function (event) {
-            let elem = $(event.target)[0];
+            let elem = $(event.target);
             if (elem.localName === "input" && elem.type === "checkbox") {
                 if (elem.checked)
                     $(`form#${nameForm}`).find('[type="submit"]').attr("disabled", false);
@@ -174,8 +174,6 @@ $(function () {
                 pf.sendDataToServer();
             }
         }
-    }
-    function checkCheckbox() {
     }
     function validationForm(nameForm, nameField, valueField) {
         let valid;

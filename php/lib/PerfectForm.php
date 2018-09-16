@@ -173,7 +173,6 @@ class PerfectForm
     }
 
     // TODO исправить баг с добавлением одинаковых полей даты
-    // TODO добавить валидацию для полей: fullname, date
     /**
      * @method - валидация полей формы
      */
@@ -181,28 +180,16 @@ class PerfectForm
     {
         foreach ($this->dataForm as $key => $item) {
 
-            switch ($item['typeField']) {
-                case "email":
-                    $this->validationField($item["value"], DefaultSettings::REGEXP_EMAIL, $key, "Email");
-                    break;
-                case "firstname":
-                    $this->validationField($item["value"], DefaultSettings::REGEXP_FIRST_LAST_NAME, $key, "Имя");
-                    break;
-                case "lastname":
-                    $this->validationField($item["value"], DefaultSettings::REGEXP_FIRST_LAST_NAME, $key, "Фамилия");
-                    break;
-                case "fullname":
-                    $this->validationField($item["value"], DefaultSettings::REGEXP_FULLNAME, $key, "ФИО");
-                    break;
-                case "phone":
-                    $this->validationField($item["value"], DefaultSettings::REGEXP_PHONE, $key, "Телефон");
-                    break;
-                case "date":
-                    $this->validationField($item["value"], DefaultSettings::REGEXP_DATE, $key, "Дата");
-                    break;
-                default:
-                    break;
-            }
+            $typeField = $item["typeField"];
+            $valueField = $item["value"];
+
+            if (array_search($valueField, DefaultSettings::VALIDATION))
+                $this->validationField(
+                    $valueField,
+                    DefaultSettings::VALIDATION[$typeField]["regexp"],
+                    $typeField,
+                    DefaultSettings::VALIDATION[$typeField]["label"]
+                );
         }
     }
 
