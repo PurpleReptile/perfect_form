@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ca1d63d7-ba56-49e1-ba61-085c8e3a2bd2" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/PerfectForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/PerfectForm.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/lib/DefaultSettings.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/lib/DefaultSettings.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/lib/PerfectForm.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/lib/PerfectForm.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ts/PerfectForm.ts" beforeDir="false" afterPath="$PROJECT_DIR$/ts/PerfectForm.ts" afterDir="false" />
-    </list>
+    <list default="true" id="ca1d63d7-ba56-49e1-ba61-085c8e3a2bd2" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -127,7 +120,7 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="css" value="249" />
-          <entry key="gitignore" value="32" />
+          <entry key="gitignore" value="33" />
           <entry key="html" value="2139" />
           <entry key="js" value="11" />
           <entry key="json" value="12" />
@@ -143,7 +136,7 @@
           <entry key="JSON" value="12" />
           <entry key="JavaScript" value="11" />
           <entry key="PHP" value="8401" />
-          <entry key="PLAIN_TEXT" value="33" />
+          <entry key="PLAIN_TEXT" value="34" />
           <entry key="TypeScript" value="4739" />
         </counts>
       </usages-collector>
@@ -320,7 +313,7 @@
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="69">
-              <caret line="3" column="2" selection-start-line="3" selection-start-column="2" selection-end-line="3" selection-end-column="2" />
+              <caret line="3" column="3" selection-start-line="3" selection-start-column="3" selection-end-line="3" selection-end-column="3" />
             </state>
           </provider>
         </entry>
@@ -622,12 +615,12 @@
       <workItem from="1536857413573" duration="1417000" />
       <workItem from="1537083298649" duration="91000" />
       <workItem from="1537083683107" duration="10228000" />
-      <workItem from="1537109542361" duration="8085000" />
+      <workItem from="1537109542361" duration="8366000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="125221000" />
+    <option name="totallyTimeSpent" value="125502000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -944,7 +937,7 @@
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="69">
-          <caret line="3" column="2" selection-start-line="3" selection-start-column="2" selection-end-line="3" selection-end-column="2" />
+          <caret line="3" column="3" selection-start-line="3" selection-start-column="3" selection-end-line="3" selection-end-column="3" />
         </state>
       </provider>
     </entry>
