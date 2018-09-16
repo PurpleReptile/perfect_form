@@ -173,7 +173,7 @@ class PerfectForm
     }
 
     // TODO исправить баг с добавлением одинаковых полей даты
-    // TODO добавить валидацию для полей: firstname, lastname, fullname, date
+    // TODO добавить валидацию для полей: fullname, date
     /**
      * @method - валидация полей формы
      */
@@ -186,10 +186,10 @@ class PerfectForm
                     $this->validationField($item["value"], DefaultSettings::REGEXP_EMAIL, $key, "Email");
                     break;
                 case "firstname":
-                    $this->validationField($item["value"], DefaultSettings::REGEXP_FIRSTNAME, $key, "Имя");
+                    $this->validationField($item["value"], DefaultSettings::REGEXP_FIRST_LAST_NAME, $key, "Имя");
                     break;
                 case "lastname":
-                    $this->validationField($item["value"], DefaultSettings::REGEXP_LASTNAME, $key, "Фамилия");
+                    $this->validationField($item["value"], DefaultSettings::REGEXP_FIRST_LAST_NAME, $key, "Фамилия");
                     break;
                 case "fullname":
                     $this->validationField($item["value"], DefaultSettings::REGEXP_FULLNAME, $key, "ФИО");

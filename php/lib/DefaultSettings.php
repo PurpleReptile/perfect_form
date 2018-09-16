@@ -17,9 +17,8 @@ class DefaultSettings
 
     // regexp for validation
     const REGEXP_EMAIL= "/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/";
-    const REGEXP_FIRSTNAME = "/^\W{2,}$/";
-    const REGEXP_LASTNAME = "";
-    const REGEXP_FULLNAME = "";
+    const REGEXP_FIRST_LAST_NAME = "/^[А-Я][а-я]+$/";
+    const REGEXP_FULLNAME = "/^([А-Я][а-я]+)\s([А-Я][а-я]+)$/";
     const REGEXP_PHONE = "/^[\d|\s|\-]*$/";
     const REGEXP_DATE = "";
 
