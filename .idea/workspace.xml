@@ -2,15 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ca1d63d7-ba56-49e1-ba61-085c8e3a2bd2" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/PerfectForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/PerfectForm.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/lib/DefaultSettings.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/lib/DefaultSettings.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/lib/PerfectForm.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/lib/PerfectForm.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/lib/PrepareDataToServer.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/lib/PrepareDataToServer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/php/main.php" beforeDir="false" afterPath="$PROJECT_DIR$/php/main.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tmp/bsForm.html" beforeDir="false" afterPath="$PROJECT_DIR$/tmp/bsForm.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ts/PerfectForm.ts" beforeDir="false" afterPath="$PROJECT_DIR$/ts/PerfectForm.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -68,7 +62,7 @@
     <session id="2073452101">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="33" />
+          <entry key="project.closed" value="34" />
           <entry key="project.open.time.101" value="1" />
           <entry key="project.open.time.113" value="1" />
           <entry key="project.open.time.119" value="1" />
@@ -237,11 +231,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../../../tests/uploadFiles/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="17" column="8" selection-start-line="17" selection-start-column="8" selection-end-line="17" selection-end-column="8" />
+            <state relative-caret-position="184">
+              <caret line="8" selection-start-line="8" selection-end-line="8" />
             </state>
           </provider>
         </entry>
@@ -289,11 +283,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/php/main.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="161">
-              <caret line="7" selection-start-line="7" selection-end-line="7" />
+            <state relative-caret-position="138">
+              <caret line="6" selection-start-line="6" selection-end-line="6" />
             </state>
           </provider>
         </entry>
@@ -422,11 +416,12 @@
   </component>
   <component name="PhpWebServerValidation" path_to_validation_script="W:\projects\web\persons-company\alexander_zdorov\perfect_form" selected_validation_type="LOCAL" web_path_to_validation_script="http://127.0.0.1/" />
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="PHP" />
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="952" />
     <option name="width" value="977" />
     <option name="height" value="523" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
@@ -606,12 +601,12 @@
       <workItem from="1537463702392" duration="1642000" />
       <workItem from="1537466222625" duration="1056000" />
       <workItem from="1537468199996" duration="2673000" />
-      <workItem from="1537470964709" duration="2473000" />
+      <workItem from="1537470964709" duration="2822000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="146389000" />
+    <option name="totallyTimeSpent" value="146738000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -623,26 +618,26 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="7" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.60422534" visible="true" weight="0.17804551" />
       <window_info id="Structure" order="1" sideWeight="0.39577466" side_tool="true" weight="0.18942437" />
       <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="PHP-CGI Server" weight="0.32957748" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32827735" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4991699" weight="0.32816902" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.4986165" visible="true" weight="0.6014084" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.34788734" />
-      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="TypeScript" order="9" weight="0.4" />
-      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.4997233" weight="0.3830986" />
-      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5013835" side_tool="true" weight="0.45070422" />
-      <window_info anchor="bottom" id="Version Control" order="12" weight="0.32722145" />
+      <window_info anchor="bottom" id="PHP-CGI Server" order="0" weight="0.32957748" />
+      <window_info anchor="bottom" id="Message" order="1" />
+      <window_info anchor="bottom" id="Find" order="2" weight="0.32827735" />
+      <window_info anchor="bottom" id="Run" order="3" sideWeight="0.4991699" weight="0.32816902" />
+      <window_info anchor="bottom" id="Debug" order="4" sideWeight="0.4986165" weight="0.6014084" />
+      <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="7" weight="0.34788734" />
+      <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
+      <window_info anchor="bottom" id="TypeScript" order="10" weight="0.4" />
+      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.4997233" weight="0.3830986" />
+      <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.5013835" side_tool="true" weight="0.45070422" />
+      <window_info anchor="bottom" id="Version Control" order="13" show_stripe_button="false" weight="0.32722145" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -797,13 +792,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../../tests/uploadFiles/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="17" column="8" selection-start-line="17" selection-start-column="8" selection-end-line="17" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="414">
@@ -871,8 +859,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/php/main.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="7" selection-start-line="7" selection-end-line="7" />
+        <state relative-caret-position="138">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../tests/uploadFiles/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="8" selection-start-line="8" selection-end-line="8" />
         </state>
       </provider>
     </entry>
