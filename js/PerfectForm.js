@@ -92,28 +92,35 @@ class PerfectForm {
         console.log(jqXHR);
     }
     sendDataToServer() {
+        let formData = new FormData();
+        formData.append("firstname", "test");
+        formData.append("typeRequest", "test");
         this.dataToServer = {
-            toSend: this.dataFields,
+            toSend: formData,
             typeRequest: this.typeRequestSendMsg,
             nameForm: this.nameForm
         };
         console.log(this.dataToServer);
+        console.log(formData);
         $.ajax({
             type: 'post',
             url: this.urlScript,
-            data: this.dataToServer,
-            dataType: 'json',
+            data: formData,
+            contentType: false,
+            processData: false,
             success: this.sendDataToServerSuccess,
             error: this.sendDataToServerError
         });
     }
     sendDataToServerSuccess(response) {
-        if (response.status == "success") {
-            $('#mail-place').html(response.message);
-            console.log("message was send");
-        }
-        else {
-            console.log(response.msg);
+        switch (response.status) {
+            case "success":
+                $('#mail-place').html(response.message);
+                console.log("message was send");
+                break;
+            case "error":
+                console.log(response.errors);
+                break;
         }
     }
     sendDataToServerError(jqXHR) {
@@ -128,8 +135,48 @@ $(function () {
         pf.includeForm();
         $("body").unbind("submit");
         $("body").unbind("keyup");
-        $("body").bind("submit", `#${nameForm}`, submitForm);
-        $("body").bind("keyup", `#${nameForm}`, validationForm);
+        $("body").bind("submit", `#${nameForm}`, function (event) {
+            let data = [];
+            let dataElem = [];
+            let found = false;
+            event.preventDefault();
+            if ($(event.target).is(`form#${nameForm}`)) {
+                $.each($(event.target.children).find("input"), function (ind, item) {
+                    found = false;
+                    switch ($(this).attr('type')) {
+                        case "text":
+                            let typeField = ($(item).attr('data-pf-field') == "date") ? "date" : "text";
+                            if (prepareField($(item), typeField) !== false) {
+                                dataElem = prepareField($(item), typeField);
+                                found = true;
+                            }
+                            break;
+                        case "email":
+                            dataElem = prepareField($(item), "email");
+                            found = true;
+                            break;
+                        case "range":
+                            dataElem = prepareFieldRange($(item));
+                            found = true;
+                            break;
+                        case "file":
+                            if (prepareFieldFile($(item)) !== false) {
+                                dataElem = prepareFieldFile($(item));
+                                found = true;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                    if (found)
+                        data.push(dataElem);
+                });
+                if (!$.isEmptyObject(data)) {
+                    pf.setDataFields = data;
+                    pf.sendDataToServer();
+                }
+            }
+        });
         $("body").bind("click", `#${nameForm}`, function (event) {
             let elem = $(event.target);
             if (elem.localName === "input" && elem.type === "checkbox") {
@@ -140,41 +187,6 @@ $(function () {
             }
         });
     });
-    function submitForm(nameForm, event, pf) {
-        let data = [];
-        let dataElem = [];
-        event.preventDefault();
-        if ($(event.target).is(`form#${nameForm}`)) {
-            $.each($(event.target.children).find("input"), function (ind, item) {
-                switch ($(this).attr('type')) {
-                    case "text":
-                        if ($(item).attr('data-pf-field') == 'date')
-                            dataElem = prepareField($(item), "date");
-                        else
-                            dataElem = prepareField($(item), "text");
-                        break;
-                    case "email":
-                        dataElem = prepareField($(item), "email");
-                        break;
-                    case "range":
-                        dataElem = prepareFieldRange($(item));
-                        break;
-                    case "file":
-                        dataElem = prepareFieldFile($(item));
-                        break;
-                    default:
-                        break;
-                }
-                if (dataElem) {
-                    data.push(dataElem);
-                }
-            });
-            if (!$.isEmptyObject(data)) {
-                pf.setDataFields = data;
-                pf.sendDataToServer();
-            }
-        }
-    }
     function validationForm(nameForm, nameField, valueField) {
         let valid;
         let expCorrectField;
@@ -182,7 +194,6 @@ $(function () {
         if (valid.validation()) {
         }
         else {
-            expCorrectField = valid.getExpCorrectField();
         }
     }
     function prepareField(elem, typeField) {
@@ -194,6 +205,7 @@ $(function () {
                 typeField: elem.attr("data-pf-field")
             };
         }
+        return false;
     }
     function prepareFieldRange(elem) {
         return {
@@ -205,12 +217,13 @@ $(function () {
         };
     }
     function prepareFieldFile(elem) {
-        if ((elem[0].files.length) > 0) {
+        if (($(elem)[0].files.length) > 0) {
             return {
                 files: $(this)[0].files,
                 typeField: files
             };
         }
+        return false;
     }
     $("#sendMesage").click(function (e) {
         e.preventDefault();

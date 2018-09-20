@@ -119,30 +119,42 @@ class PerfectForm {
 
     // отправка данных на сервер
     public sendDataToServer(): any {
+        let formData = new FormData();
+        formData.append("firstname", "test");
+        formData.append("typeRequest", "test");
+        // formData.append(this.dataFields);
+        // console.log
         this.dataToServer = {
-            toSend: this.dataFields,
+            // toSend: this.dataFields,
+            toSend: formData,
             typeRequest: this.typeRequestSendMsg,
             nameForm: this.nameForm
         };
 
         console.log(this.dataToServer);
+        console.log(formData);
+
         $.ajax({
             type: 'post',
             url: this.urlScript,
-            data: this.dataToServer,
-            dataType: 'json',
+            // data: this.dataToServer,
+            data: formData,
+            contentType: false,
+            processData: false,
             success: this.sendDataToServerSuccess,
             error: this.sendDataToServerError
         });
     }
 
     private sendDataToServerSuccess(response: any): any {
-        if (response.status == "success") {
-            $('#mail-place').html(response.message);
-            console.log("message was send");
-        }
-        else {
-            console.log(response.msg);
+        switch (response.status) {
+            case "success":
+                $('#mail-place').html(response.message);
+                console.log("message was send");
+                break;
+            case "error":
+                console.log(response.errors);
+                break;
         }
     }
 
@@ -164,8 +176,61 @@ $(function () {
         $("body").unbind("submit"); // delete old bind "submit form"
         $("body").unbind("keyup");  // delete old bind "validation fields"
 
-        $("body").bind("submit", `#${nameForm}`, submitForm);   // отправка данных на сервер
-        $("body").bind("keyup", `#${nameForm}`, validationForm);    // валидация полей формы "налету"
+        // валидация полей формы "налету"
+
+        // $("body").bind("keyup", `#${nameForm}`, function (event: any) {
+
+        // отправка данных на сервер
+        $("body").bind("submit", `#${nameForm}`, function (event: any) {
+            let data: any = [];
+            let dataElem: any = [];
+            let found: boolean = false;
+
+            event.preventDefault();
+
+            if ($(event.target).is(`form#${nameForm}`)) {
+
+                $.each($(event.target.children).find("input"), function (ind, item) {
+
+                    found = false;
+
+                    switch ($(this).attr('type')) {
+                        case "text":
+                            let typeField: string = ($(item).attr('data-pf-field') == "date") ? "date" : "text";
+
+                            if (prepareField($(item), typeField) !== false) {
+                                dataElem = prepareField($(item), typeField);
+                                found = true;
+                            }
+                            break;
+                        case "email":
+                            dataElem = prepareField($(item), "email");
+                            found = true;
+                            break;
+                        case "range":
+                            dataElem = prepareFieldRange($(item));
+                            found = true;
+                            break;
+                        case "file":
+                            if (prepareFieldFile($(item)) !== false) {
+                                dataElem = prepareFieldFile($(item));
+                                found = true;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+
+                    if (found)
+                        data.push(dataElem);
+                }
+
+                if (!$.isEmptyObject(data)) {
+                    pf.setDataFields = data;
+                    pf.sendDataToServer();
+                }
+            }
+        });
         $("body").bind("click",  `#${nameForm}`, function (event: any) {
 
             let elem = $(event.target);
@@ -186,46 +251,46 @@ $(function () {
      * @param event - объект событий
      * @param pf - объект "PerfectForm"
      */
-    function submitForm(nameForm: any, event: any, pf: PerfectForm) {
-        let data: any = [];
-        let dataElem: any = [];
-
-        event.preventDefault();
-
-        if ($(event.target).is(`form#${nameForm}`)) {
-
-            $.each($(event.target.children).find("input"), function (ind, item) {
-                switch ($(this).attr('type')) {
-                    case "text":
-                        if ($(item).attr('data-pf-field') == 'date')
-                            dataElem = prepareField($(item), "date");
-                        else
-                            dataElem = prepareField($(item), "text");
-                        break;
-                    case "email":
-                        dataElem = prepareField($(item), "email");
-                        break;
-                    case "range":
-                        dataElem = prepareFieldRange($(item));
-                        break;
-                    case "file":
-                        dataElem = prepareFieldFile($(item));
-                        break;
-                    default:
-                        break;
-                }
-
-                if (dataElem) {
-                    data.push(dataElem);
-                }
-            }
-
-            if (!$.isEmptyObject(data)) {
-                pf.setDataFields = data;
-                pf.sendDataToServer();
-            }
-        }
-    }
+    // function submitForm(nameForm: any, event: any, pf: PerfectForm) {
+    //     let data: any = [];
+    //     let dataElem: any = [];
+    //
+    //     event.preventDefault();
+    //
+    //     if ($(event.target).is(`form#${nameForm}`)) {
+    //
+    //         $.each($(event.target.children).find("input"), function (ind, item) {
+    //             switch ($(this).attr('type')) {
+    //                 case "text":
+    //                     if ($(item).attr('data-pf-field') == 'date')
+    //                         dataElem = prepareField($(item), "date");
+    //                     else
+    //                         dataElem = prepareField($(item), "text");
+    //                     break;
+    //                 case "email":
+    //                     dataElem = prepareField($(item), "email");
+    //                     break;
+    //                 case "range":
+    //                     dataElem = prepareFieldRange($(item));
+    //                     break;
+    //                 case "file":
+    //                     dataElem = prepareFieldFile($(item));
+    //                     break;
+    //                 default:
+    //                     break;
+    //             }
+    //
+    //             if (dataElem) {
+    //                 data.push(dataElem);
+    //             }
+    //         }
+    //
+    //         if (!$.isEmptyObject(data)) {
+    //             pf.setDataFields = data;
+    //             pf.sendDataToServer();
+    //         }
+    //     }
+    // }
 
     // TODO: реализовать валидацию полей формы "налету"
     /**
@@ -243,7 +308,7 @@ $(function () {
         if (valid.validation()) {
 
         } else {
-            expCorrectField = valid.getExpCorrectField();
+            // expCorrectField = valid.getExpCorrectField();
             // $(nameField).
         }
     }
@@ -262,6 +327,7 @@ $(function () {
                 typeField: elem.attr("data-pf-field")
             };
         }
+        return false;
     }
 
     /**
@@ -283,12 +349,13 @@ $(function () {
      * @param elem - объект элемента
      */
     function prepareFieldFile(elem: any) {
-        if ((elem[0].files.length) > 0) {
+        if (($(elem)[0].files.length) > 0) {
             return {
                 files: $(this)[0].files,
                 typeField: files
             };
         }
+        return false;
     }
 
     /**

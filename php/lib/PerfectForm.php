@@ -3,6 +3,9 @@
 require_once 'DefaultSettings.php';
 require_once 'TemplateMail.php';
 
+require_once __DIR__ . '/phpmailer/PHPMailer.php';
+require_once __DIR__ . '/phpmailer/SMTP.php';
+
 use Templates\Mail\TemplateMail;
 
 class PerfectForm
@@ -90,6 +93,10 @@ class PerfectForm
     public function sendMsg()
     {
         $this->validationAllFields();
+
+        if (isset($this->errors))
+            return false;
+
         $this->settingsMail = $this->getSettingsForSubmit();
 
         $TemplateMail = new TemplateMail($this->message);
@@ -108,6 +115,28 @@ class PerfectForm
 
 //        $this->addFileReport();
         return true;
+    }
+
+    public function sendMsgFromMailer()
+    {
+        // Настройки
+        $mail = new \PHPMailer\PHPMailer\PHPMailer();
+        $mail->isSMTP();
+        $mail->Host = "smtp.yandex.ru";
+        $mail->SMTPAuth = true;
+        $mail->Username = "ig.poyarkoff@yandex.ru"; // Ваш логин в Яндексе. Именно логин, без @yandex.ru
+        $mail->Password = "}Br8O107#n4NWs[Ehi&6X<TRv"; // Ваш пароль
+        $mail->SMTPSecure = "ssl";
+        $mail->Port = 465;
+        $mail->setFrom("ig.poyarkoff@yandex.ru"); // Ваш Email
+        $mail->addAddress("ig.poyarkoff@yandex.ru"); // Email получателя
+
+        // Письмо
+        $mail->isHTML(true);
+        $mail->Subject = "Тестовый заголовок"; // Заголовок письма
+        $mail->Body = "Тестовое письмо от phpmailer";
+
+        $mail->send();
     }
 
     /**
@@ -183,7 +212,7 @@ class PerfectForm
             $typeField = $item["typeField"];
             $valueField = $item["value"];
 
-            if (array_search($valueField, DefaultSettings::VALIDATION))
+            if (array_key_exists($typeField, DefaultSettings::VALIDATION))
                 $this->validationField(
                     $valueField,
                     DefaultSettings::VALIDATION[$typeField]["regexp"],

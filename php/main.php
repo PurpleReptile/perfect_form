@@ -16,7 +16,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && !empty($_POST["typeRequest"])) {
                 $prepareData->includeForm($_POST['nameForm']);
                 break;
             case "sendMessage":
-                $prepareData->sendForm($_POST['nameForm'], $_POST['toSend']);
+//                $prepareData->sendForm($_POST['nameForm'], $_POST['toSend']);
+//                $prepareData->sendFormPHPMailer($_POST['nameForm']);
                 break;
             default:
                 break;

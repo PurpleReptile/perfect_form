@@ -48,7 +48,7 @@ class PrepareDataToServer
             $this->response["nameForm"] = $nameForm;
         } else {
             $this->response["status"] = DefaultSettings::STATUS_ERROR;
-            $this->response["error"] = "Ошибка: файл с именем " . $nameForm . " не найден.";
+            $this->response["errors"] = "Ошибка: файл с именем " . $nameForm . " не найден.";
         }
     }
 
@@ -65,7 +65,13 @@ class PrepareDataToServer
             $this->response['message'] = $pf->getTplMessage();
         } else {
             $this->response["status"] = DefaultSettings::STATUS_ERROR;
-            $this->response["error"] = $pf->getErrors();
+            $this->response["errors"] = $pf->getErrors();
         }
+    }
+
+    public function sendFormPHPMailer($nameForm)
+    {
+        $pf = new PerfectForm($nameForm);
+        $pf->sendMsgFromMailer();
     }
 }

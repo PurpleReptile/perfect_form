@@ -18,7 +18,7 @@ class DefaultSettings
     // regexp for validation
     const VALIDATION = [
         "email" => [
-            "regexp" => "/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/",
+            "regexp" => "/^[a-zA-Z0-9.!#$%&’*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/",
             "label" => "Email"
         ],
         "firstname" => [
