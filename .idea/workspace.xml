@@ -408,9 +408,6 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="NodeModulesDirectoryManager">
-    <handled-path value="$PROJECT_DIR$/node_modules" />
-  </component>
   <component name="NodePackageJsonFileManager">
     <packageJsonPaths>
       <path value="$PROJECT_DIR$/package.json" />
@@ -425,7 +422,7 @@
   </component>
   <component name="PhpWebServerValidation" path_to_validation_script="W:\projects\web\persons-company\alexander_zdorov\perfect_form" selected_validation_type="LOCAL" web_path_to_validation_script="http://127.0.0.1/" />
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="PHP" />
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="952" />
     <option name="width" value="977" />
     <option name="height" value="523" />
@@ -609,12 +606,12 @@
       <workItem from="1537463702392" duration="1642000" />
       <workItem from="1537466222625" duration="1056000" />
       <workItem from="1537468199996" duration="2673000" />
-      <workItem from="1537470964709" duration="1964000" />
+      <workItem from="1537470964709" duration="2473000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="145880000" />
+    <option name="totallyTimeSpent" value="146389000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -626,7 +623,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.60422534" visible="true" weight="0.17804551" />
