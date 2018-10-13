@@ -11,8 +11,8 @@ class PrepareDataToServer
     private $response;
 
     /**
-     * @method - получение ответа с сервера
-     * @return mixed - ответ с сервера
+     * @method - getting response from server
+     * @return mixed - response server
      */
     public function getResponse()
     {
@@ -20,13 +20,13 @@ class PrepareDataToServer
     }
 
     /**
-     * @method - добавление параметра для ответа с сервера
-     * @param string $type - тип параметра
-     * @param string $value - значение параметра
+     * @method - adding parameter for response server
+     * @param string $type - type parameter
+     * @param array|string $value - value parameter
      */
     public function setResponse($type, $value)
     {
-        $this->response[$type] = $value;
+        $this->response[$type] =  $value;
     }
 
     public function __construct()
@@ -34,9 +34,9 @@ class PrepareDataToServer
     }
 
     /**
-     * @method - получение содержимого формы для проекта
-     * @method - подключение шаблона формы
-     * @param string $nameForm - название формы
+     * @method - getting content form for project
+     * @method - including template form
+     * @param string $nameForm - name form
      */
     public function includeForm($nameForm)
     {
@@ -53,25 +53,54 @@ class PrepareDataToServer
     }
 
     /**
-     * @method - отправка данных формы на сервер
-     * @param string $nameForm - название формы
-     * @param $dataMsg
+     * @method - sending data form to the server
+     * @param string $dataMsg - data form from fields
+     * @param string $ownerInfo - additional info about owner
+     * @param object $files - list files for uploading
+     * @param int $numberOfFiles - number of files
+     * @param bool $isModalWindow - info about type window (modal/static)
      */
-    public function sendForm($nameForm, $dataMsg)
+    public function sendForm($dataMsg, $ownerInfo, $files, $numberOfFiles, $isModalWindow)
     {
-        $pf = new PerfectForm($nameForm, $dataMsg);
-        if ($pf->sendMsg()) {
+        $pf = new PerfectForm(json_decode($dataMsg), json_decode($ownerInfo));
+
+        // adding files to send
+        if ($numberOfFiles > 0) {
+
+            if ($numberOfFiles > 1)
+                $files["file"] = $this->reArrayFiles($files["file"]);
+
+            $pf->setListFiles($files["file"], $numberOfFiles);
+        }
+
+        if ($pf->sendMessage()) {
             $this->response["status"] = DefaultSettings::STATUS_SUCCESS;
-            $this->response['message'] = $pf->getTplMessage();
+            $this->response["isModalWindow"] = $isModalWindow;
         } else {
             $this->response["status"] = DefaultSettings::STATUS_ERROR;
             $this->response["errors"] = $pf->getErrors();
         }
+
+        $this->response["nameForm"] = $pf->getNameForm();
     }
 
-    public function sendFormPHPMailer($nameForm)
+    /**
+     * @method reorganization $_FILES to human view
+     * @param $file_post
+     * @return array
+     */
+    private function reArrayFiles(&$file_post)
     {
-        $pf = new PerfectForm($nameForm);
-        $pf->sendMsgFromMailer();
+        $file_ary = array();
+        $file_count = count($file_post['name']);
+        $file_keys = array_keys($file_post);
+
+        for ($ind = 0; $ind < $file_count; $ind++) {
+            foreach ($file_keys as $key) {
+                $file_ary[$ind][$key] = $file_post[$key][$ind];
+            }
+        }
+
+        return $file_ary;
     }
 }

@@ -1,0 +1,97 @@
+
+<form id="bsForm" method="post" class="form" enctype="multipart/form-data">
+
+    <!-- "firstname" -->
+    <div class="pf group">
+        <input class="valid"
+               type="text"
+               data-pf-field="firstname"
+               value="Игорь"
+               tabindex="1"
+               required />
+        <span class="highlight"></span>
+        <span class="bar"></span>
+        <label>Введите имя<span class="req">*</span></label>
+    </div>
+
+    <!-- "surname" -->
+    <div class="pf group">
+        <input class="valid"
+               type="text"
+               data-pf-field="surname"
+               value="Игорь"
+               tabindex="2"
+               required />
+        <span class="highlight"></span>
+        <span class="bar"></span>
+        <label>Введите фамилию<span class="req">*</span></label>
+    </div>
+
+    <!-- "fullName" -->
+    <div class="pf group">
+        <input class="valid"
+               type="text"
+               data-pf-field="fullname"
+               value="Игорь Игорь Игорь"
+               tabindex="3"
+               required/>
+        <span class="highlight"></span>
+        <span class="bar"></span>
+        <label>Введите ФИО<span class="req">*</span></label>
+    </div>
+
+    <!-- "phone" -->
+    <div class="pf group">
+        <input class="valid"
+               type="text"
+               data-pf-field="phone"
+               value="123456"
+               tabindex="4"
+               required />
+        <span class="highlight"></span>
+        <span class="bar"></span>
+        <label>Введите телефон<span class="req">*</span></label>
+    </div>
+
+    <!-- "email" -->
+    <div class="pf group">
+        <input class="valid"
+               type="email"
+               data-pf-field="email"
+               value="ig.poyarkoff@yandex.ru"
+               tabindex="5"
+               required />
+        <span class="highlight"></span>
+        <span class="bar"></span>
+        <label>Введите e-mail<span class="req">*</span></label>
+    </div>
+
+    <!-- date -->
+    <div class="pf group">
+        <input type="text"
+               data-pf-field="date"
+               tabindex="6"
+               id="datetimepicker" />
+        <span class="highlight"></span>
+        <span class="bar"></span>
+        <label>Введите дату</label>
+    </div>
+
+    <!-- "checkbox"-->
+    <label class="pf checkbox">Я голосую против всех
+        <input type="checkbox"
+               checked="checked"
+               data-pf-field="checkbox"
+               tabindex="7">
+        <span class="checkmark"></span>
+    </label>
+
+    <p>Выбрать файл
+        <label class="btn btn-primary">Обзор… <input type="file" style="display: none;" tabindex="8" multiple></label>
+    </p>
+
+    <p><input class="btn btn-primary" type="submit" value="Отправить"></p>
+
+    <!-- reCAPTCHA token -->
+    <input type="hidden" data-pf-field="recaptcha">
+</form>

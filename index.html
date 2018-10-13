@@ -12,48 +12,106 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
     <!-- JQuery UI -->
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <!-- datetimepicker -->
+    <link rel="stylesheet" href="css/datetimepicker/jquery.datetimepicker.min.css">
+    <script src="js/datetimepicker/jquery.datetimepicker.full.min.js"></script>
     <!-- Sweetalert2 -->
-    <!--<script src="sweetalert2.all.min.js"></script>-->
-    <!-- Optional: include a polyfill for ES6 Promises for IE11 and Android browser -->
-    <!--<script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.28.2/dist/sweetalert2.all.min.js"></script>
+    <!-- reCAPTCHA v3 -->
+    <script src='https://www.google.com/recaptcha/api.js?render=6LeNyHIUAAAAAEX7wD_srG8r17k67OOPZJwZKFjn'></script>
 </head>
 <body>
 
-<div class="container">
-    <div class="row">
-        <div class="form-group">
-            <button class="btn btn-primary pull-right" data-pf-open data-pf-name="bsForm">Открыть форму</button>
-        </div>
+    <div style="display: flex; justify-content: center; margin: 2em 0;">
+        <button class="btn btn-primary" data-pf-open="bsForm" style="margin-right: 2em;">Открыть форму bsForm</button>
+        <button class="btn btn-primary" data-pf-open="bsForm2">Открыть форму bsForm2</button>
     </div>
-    <div class="row">
-        <div class="form-group">
-            <button class="btn btn-primary pull-right" id="sendMesage">Отправить тестовое письмо</button>
+
+
+    <div style="display: flex;justify-content: center;margin-top: 8em;">
+        <form id="bsFormStatic" data-pf-form method="post" class="form" enctype="multipart/form-data">
+
+        <!-- "firstname" -->
+        <div class="pf group">
+            <input class="valid"
+                   type="text"
+                   data-pf-field="firstname"
+                   value="Игорь"
+                   tabindex="1"
+                   required />
+            <span class="highlight"></span>
+            <span class="bar"></span>
+            <label>Введите имя<span class="req">*</span></label>
         </div>
+
+        <!-- "phone" -->
+        <div class="pf group">
+            <input class="valid"
+                   type="text"
+                   data-pf-field="phone"
+                   value="123456"
+                   tabindex="4"
+                   required />
+            <span class="highlight"></span>
+            <span class="bar"></span>
+            <label>Введите телефон<span class="req">*</span></label>
+        </div>
+
+        <!-- "email" -->
+        <div class="pf group">
+            <input class="valid"
+                   type="email"
+                   data-pf-field="email"
+                   value="ig.poyarkoff@yandex.ru"
+                   tabindex="5"
+                   required />
+            <span class="highlight"></span>
+            <span class="bar"></span>
+            <label>Введите e-mail<span class="req">*</span></label>
+        </div>
+
+        <!-- date -->
+        <div class="pf group">
+            <input type="text"
+                   data-pf-field="date"
+                   tabindex="6"
+                   id="datetimepicker" />
+            <span class="highlight"></span>
+            <span class="bar"></span>
+            <label>Введите дату</label>
+        </div>
+
+        <!-- "checkbox"-->
+        <label class="pf checkbox">Я голосую против всех
+            <input type="checkbox"
+                   checked="checked"
+                   data-pf-field="checkbox"
+                   tabindex="6">
+            <span class="checkmark"></span>
+        </label>
+
+        <p>Выбрать файл
+            <label class="btn btn-primary">Обзор… <input type="file" style="display: none;" tabindex="7" multiple></label>
+        </p>
+
+        <p><input class="btn btn-primary" type="submit" value="Отправить"></p>
+
+        <!-- reCAPTCHA token -->
+        <!--<input type="hidden" data-pf-field="recaptcha">-->
+    </form>
     </div>
-</div>
 
-<div data-pf-place="bsForm" style="display: flex; justify-content: center;"></div>
-<div id="mail-place"></div>
-
-<!--<div class="pf group">-->
-    <!--<input type="text" required>-->
-    <!--<span class="highlight"></span>-->
-    <!--<span class="bar"></span>-->
-    <!--<label>Name</label>-->
-<!--</div>-->
-
-<!--<script>-->
-    <!--swal({-->
-        <!--title: 'Error!',-->
-        <!--text: 'Do you want to continue',-->
-        <!--type: 'error',-->
-        <!--confirmButtonText: 'Cool'-->
-    <!--});-->
-<!--</script>-->
-
-<script type="text/javascript" src="js/PerfectForm.js"></script>
-<!-- Datapicker localization RU -->
-<script type="text/javascript" src="js/datapicker-ru.js"></script>
+    <script type="text/javascript" src="js/PerfectForm.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script>
+        $.datetimepicker.setLocale('ru');
+        $('#datetimepicker').datetimepicker({
+            format: 'd/m/Y H:i',
+            formatDate: 'd.m.y',
+            formatTime: 'H:i',
+            step: 5
+        });
+    </script>
 
 </body>
 </html>

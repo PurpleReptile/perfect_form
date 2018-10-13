@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>{{ site_name }}</title>
+</head>
+<body style="margin:0;padding:0;background:#f6f6f6;">
+<div style="height:100%;padding-top:20px;background:#f6f6f6;">
+
+    <a href="{{ site_url }}">
+        <img style="{{ logo }}"
+             src="{{ logo_url }}"
+             alt="{{ site_url }}"
+             width="120" height="90"/>
+    </a>
+
+    <table class="body-wrap" style="padding:0 20px 20px 20px;width: 100%;background:#f6f6f6;margin-top:10px;">
+        <tr>
+            <td></td>
+            <td class="container" style="border:1px solid #f0f0f0;background:#ffffff;width:800px;margin:auto;">
+                <div class="content">
+                    <table style="width:100%;">
+                        <tr>
+                            <td>
+                                <h3 style="{{ h }}{{ h3 }}">Информация о пользователе</h3>
+                                <div style="width:90%;margin:auto;">
+                                    {{ dataUser }}
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- /content -->
+            </td>
+            <td></td>
+        </tr>
+    </table>
+    <!-- /body -->
+
+    <!-- footer -->
+    <table style="clear:both !important;width: 100%;">
+        <tr>
+            <td></td>
+            <td class="container">
+                <!-- content -->
+                <div class="content">
+                    <table style="width:100%;text-align: center;">
+                        <tr>
+                            <td align="center">
+                                <p style="{{ p }}">
+                                    <a href="{{ site_url }}" style="color: #999999;">{{ site_name }}</a>
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- /content -->
+            </td>
+            <td></td>
+        </tr>
+    </table>
+    <!-- /footer -->
+
+</div>
+</body>
+</html>

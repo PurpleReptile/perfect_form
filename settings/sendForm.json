@@ -1,7 +1,36 @@
 {
-    "email": 
-        {
+        "email": {
             "to": "ig.poyarkoff@yandex.ru",
-            "subject": "Сайт мечты"
-          }
-    }
+            "owner": "ig.evg.po@gmail.com",
+            "subject": "Test title"
+        },
+        "smtp": {
+            "username": "ig.poyarkoff",
+            "password": ""
+        },
+        "files": {
+            "extensions": ["txt", "jpg", "jpeg", "png"],
+            "max_size": "2097152"
+        },
+        "form": {
+            "bsForm": {
+                "required": [
+                    "firstname",
+                    "surname",
+                    "fullname",
+                    "email"
+                ]
+            },
+            "bsForm2": {
+                "required": [
+                    "firstname",
+                    "email"
+                ]
+            },
+            "bsFormStatic": {
+                "required": [
+                    "firstname",
+                    "email"
+                ]
+            }
+        }}

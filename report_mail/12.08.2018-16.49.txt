@@ -1,8 +1,0 @@
-Имя: firstName
-Фамилия: lastName
-ФИО: fullName
-Телефон: phone number
-E-mail: ig.evg.po@gmail.com
-
-Дата: 06.06.2018
-Дата: 06.06.2018

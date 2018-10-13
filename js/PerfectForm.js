@@ -60,17 +60,27 @@ class Validation {
     }
 }
 class PerfectForm {
-    constructor(nameForm, placeForm) {
+    constructor(nameForm) {
         this.typeRequestIncludeForm = "includeForm";
         this.typeRequestSendMsg = "sendMessage";
         this.urlScript = '../php/main.php';
         this.nameForm = nameForm;
-        this.placeForm = placeForm;
+        this.urlPage = "";
+        this.reCAPTCHA = "";
         this.dataToServer = {};
         this.dataFields = {};
     }
     set setDataFields(data) {
         this.dataFields = data;
+    }
+    set setUrlPage(url) {
+        this.urlPage = url;
+    }
+    set setRECAPTCHA(reCAPTCHA) {
+        this.reCAPTCHA = reCAPTCHA;
+    }
+    set setModalWindow(isModal) {
+        this.isModalWindow = isModal;
     }
     includeForm() {
         $.ajax({
@@ -83,25 +93,87 @@ class PerfectForm {
         });
     }
     includeFormSuccess(response) {
-        if (response.status == "success")
-            $(`[data-pf-place="${response.nameForm}"]`).html(response.form);
-        else
+        if (response.status == "success") {
+            let modal = {};
+            let formContainer = {};
+            let btnClose = {};
+            modal = document.createElement("div");
+            formContainer = document.createElement("div");
+            formContainer.classList.add("pf-container");
+            formContainer.innerHTML = '<span class="btn-close">x</span>' + response.form;
+            modal.classList.add("pf-modal");
+            modal.setAttribute("id", `pf-modal-${response.nameForm}`);
+            modal.appendChild(formContainer);
+            document.body.appendChild(modal);
+            $(`#pf-modal-${response.nameForm}`).hide().fadeIn();
+            btnClose = modal.getElementsByClassName("btn-close")[0];
+            $.datetimepicker.setLocale('ru');
+            $('#datetimepicker').datetimepicker({
+                format: 'd/m/Y H:i',
+                formatDate: 'd.m.y',
+                formatTime: 'H:i',
+                step: 5
+            });
+            btnClose.onclick = function () {
+                $(`#pf-modal-${response.nameForm}`).fadeOut(function () {
+                    modal.remove();
+                    if (document.getElementsByClassName("xdsoft_datetimepicker")[0])
+                        document.getElementsByClassName("xdsoft_datetimepicker")[0].remove();
+                });
+            };
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    $(`#pf-modal-${response.nameForm}`).fadeOut(function () {
+                        modal.remove();
+                        if (document.getElementsByClassName("xdsoft_datetimepicker")[0])
+                            document.getElementsByClassName("xdsoft_datetimepicker")[0].remove();
+                    });
+                }
+            };
+        }
+        else {
+            console.log("Не удалось подключить форму");
             console.log(response.msg);
+        }
+        console.log(response);
     }
     includeFormError(jqXHR) {
         console.log(jqXHR);
     }
     sendDataToServer() {
         let formData = new FormData();
-        formData.append("firstname", "test");
-        formData.append("typeRequest", "test");
-        this.dataToServer = {
-            toSend: formData,
-            typeRequest: this.typeRequestSendMsg,
-            nameForm: this.nameForm
+        let data = {};
+        let ownerInfo = {};
+        let numberOfFiles = 0;
+        $.each(this.dataFields, function (ind, val) {
+            if (this.type === "file") {
+                numberOfFiles = this.files.length;
+                formData.append("numberOfFiles", numberOfFiles);
+                if (numberOfFiles > 1) {
+                    for (let indFile = 0; indFile < numberOfFiles; indFile++)
+                        formData.append("file[]", this.files[indFile]);
+                }
+                else
+                    formData.append("file", this.files[0]);
+            }
+            else
+                data[this.nameField] = {
+                    "type": this.type,
+                    "value": this.value,
+                    "required": this.required,
+                    "nameField": this.nameField
+                };
+        });
+        ownerInfo = {
+            "nameForm": this.nameForm,
+            "urlPage": this.urlPage
         };
-        console.log(this.dataToServer);
-        console.log(formData);
+        formData.append("data", JSON.stringify(data));
+        formData.append("ownerInfo", JSON.stringify(ownerInfo));
+        formData.append("typeRequest", this.typeRequestSendMsg);
+        formData.append("isModalWindow", this.isModalWindow);
+        if (this.reCAPTCHA)
+            formData.append("reCAPTCHA", this.reCAPTCHA);
         $.ajax({
             type: 'post',
             url: this.urlScript,
@@ -109,17 +181,138 @@ class PerfectForm {
             contentType: false,
             processData: false,
             success: this.sendDataToServerSuccess,
-            error: this.sendDataToServerError
+            error: this.sendDataToServerError,
         });
     }
-    sendDataToServerSuccess(response) {
+    sendDataToServerSuccess(resp) {
+        let response = JSON.parse(resp);
+        let nameForm = response.nameForm;
+        let lenElem = 0;
+        let listFiles = [];
+        let listParams = [];
+        let currElem = {};
         switch (response.status) {
             case "success":
-                $('#mail-place').html(response.message);
-                console.log("message was send");
+                let idForm = response.nameForm;
+                let form = {};
+                if (response.isModalWindow) {
+                    idForm = `pf-modal-${response.nameForm}`;
+                    form = document.getElementById(idForm);
+                    $(`#${idForm}`).fadeOut(function () {
+                        form.remove();
+                        if (document.getElementsByClassName("xdsoft_datetimepicker")[0])
+                            document.getElementsByClassName("xdsoft_datetimepicker")[0].remove();
+                    });
+                }
+                else {
+                    form = document.getElementById(idForm);
+                    form.reset();
+                    lenElem = form.elements.length;
+                    for (let ind = 0; ind < lenElem; ind++) {
+                        if (form[ind].type !== "submit") {
+                            form[ind].removeAttribute("value");
+                            form[ind].classList.remove("valid");
+                        }
+                        form[ind].parentElement.classList.remove("error");
+                        let exampElem = form[ind].parentElement.getElementsByClassName("example")[0];
+                        if (exampElem)
+                            form[ind].parentElement.removeChild(exampElem);
+                    }
+                }
+                swal({
+                    title: 'Отправка сообщения',
+                    text: 'Ваше сообщение было успешно отправлено.',
+                    type: 'success',
+                    confirmButtonText: 'Ок'
+                });
                 break;
             case "error":
-                console.log(response.errors);
+                let warnMsg = "";
+                let textSweetAlert = "";
+                let listErrFields = [];
+                let listRequiredFields = [];
+                let counterErrorsFields = 0;
+                nameForm = response.nameForm;
+                if (nameForm) {
+                    let form = document.getElementById(nameForm);
+                    lenElem = form.elements.length;
+                    for (let ind = 0; ind < lenElem; ind++) {
+                        form[ind].parentElement.classList.remove("error");
+                        let exampElem = form[ind].parentElement.getElementsByClassName("example")[0];
+                        if (exampElem)
+                            form[ind].parentElement.removeChild(exampElem);
+                    }
+                }
+                if (response.errors.hasOwnProperty("checkbox")) {
+                    textSweetAlert = `Согласитесь, пожалуйста, с тем, что Вы против всех.`;
+                }
+                if (response.errors.hasOwnProperty("input")) {
+                    counterErrorsFields = 0;
+                    response.errors.input.forEach(function (item, val, response, errors, input) {
+                        listErrFields.push(item.name);
+                        warnMsg += `${item.name} `;
+                        let tagAboutError = document.createElement("span");
+                        tagAboutError.innerHTML = `Пример: ${item.example}`;
+                        tagAboutError.classList.add("example");
+                        currElem = document.getElementById(nameForm);
+                        currElem = currElem.querySelector(`[data-pf-field=${item.name}]`).parentElement;
+                        currElem.classList.add("error");
+                        currElem.appendChild(tagAboutError);
+                        counterErrorsFields++;
+                    });
+                    textSweetAlert = `Ваше сообщение не может быть отправлено, так как 
+                        ${(counterErrorsFields > 1) ? `поля <b>[${warnMsg}]</b> заполнены` : `поле <b>${warnMsg}</b> заполнено`} некорректно.`;
+                }
+                if (response.errors.hasOwnProperty("required")) {
+                    response.errors.required.forEach((item, val, response, errors, required) => {
+                        let tagAboutError = document.createElement("span");
+                        tagAboutError.classList.add("example");
+                        tagAboutError.innerHTML = "Это поле обязательно к заполнению";
+                        currElem = document.getElementById(nameForm);
+                        currElem = currElem.querySelector(`[data-pf-field=${item}`).parentElement;
+                        currElem.classList.add("error");
+                        currElem.appendChild(tagAboutError);
+                    });
+                    textSweetAlert = `Ваше сообщение не может быть отправлено, так как не все обязательные поля заполнены`;
+                }
+                if (response.errors.hasOwnProperty("files")) {
+                    listFiles = response.errors.files.listFiles;
+                    listParams = response.errors.files.params;
+                    listFiles.forEach((item) => {
+                        if (item.errors.length > 0) {
+                            warnMsg += `<br>В файле <b>${item.name}</b>:`;
+                            warnMsg += `<ul>`;
+                            item.errors.forEach((itemError, valError, item, errors) => {
+                                if (itemError.type === "extension")
+                                    warnMsg += `<li>Ошибка расширения файла (текущее <b>${itemError.value}</b>).</li>`;
+                                if (itemError.type === "size") {
+                                    let currSize = itemError.value;
+                                    currSize /= 1024 / 1024;
+                                    warnMsg += `<li>Превышен допустимый размер файла (текущий <b>${Math.round((currSize * 100) / 100)} Мб)</b>.</li>`;
+                                }
+                            });
+                            warnMsg += `</ul>`;
+                        }
+                    });
+                    warnMsg += "</br> Доступные расширения: <b>[ ";
+                    listParams.extension.forEach((item) => {
+                        warnMsg += `${item} `;
+                    });
+                    warnMsg += "]</b>";
+                    warnMsg += `</br>Максимальный размер файла: <b>${listParams.size / 1024 / 1024} Мб</b>`;
+                    textSweetAlert = `Ваше сообщение не может быть отправлено, так как в файлах найдены следующие ошибки: ${warnMsg}`;
+                }
+                if (response.errors.hasOwnProperty("reCaptcha")) {
+                    textSweetAlert = `Ваше сообщение не может быть отправлено, так как Вы - Терминатор.`;
+                }
+                if (textSweetAlert) {
+                    swal({
+                        title: 'Отправка сообщения',
+                        html: textSweetAlert,
+                        type: 'error',
+                        confirmButtonText: 'Ok'
+                    });
+                }
                 break;
         }
     }
@@ -128,18 +321,47 @@ class PerfectForm {
     }
 }
 $(function () {
+    let nameForm = "";
     $("[data-pf-open]").click(function () {
-        let nameForm = $(this).data("pfName");
-        let placeForForm = `[data-pf-place="${nameForm}"]`;
-        let pf = new PerfectForm(nameForm, placeForForm);
-        pf.includeForm();
+        let nameForm = $(this).data("pfOpen");
+        if (nameForm)
+            generalMagic(nameForm, "modal");
+    });
+    if (document.querySelector("[data-pf-form]")) {
+        nameForm = document.querySelector("[data-pf-form]").getAttribute("id");
+        generalMagic(nameForm);
+    }
+    function generalMagic(nameForm, typeForm = "") {
+        let captchaExist = false;
+        let pf = new PerfectForm(nameForm);
+        if (typeForm === "modal")
+            pf.includeForm();
         $("body").unbind("submit");
-        $("body").unbind("keyup");
+        $("body").unbind("click");
+        updateCaptcha(pf, nameForm);
+        $("body").bind("click", `#${nameForm}`, function (event) {
+            let fieldsForm = document.querySelectorAll("[data-pf-field]");
+            fieldsForm.forEach(function (item, num, pfFields) {
+                item.onfocus = function () {
+                    if (item.value !== "")
+                        item.classList.add("valid");
+                    else
+                        item.classList.remove("valid");
+                };
+                item.onblur = function () {
+                    if (item.value !== "")
+                        item.classList.add("valid");
+                    else
+                        item.classList.remove("valid");
+                };
+            });
+        });
         $("body").bind("submit", `#${nameForm}`, function (event) {
             let data = [];
             let dataElem = [];
             let found = false;
             event.preventDefault();
+            updateCaptcha(pf, nameForm);
             if ($(event.target).is(`form#${nameForm}`)) {
                 $.each($(event.target.children).find("input"), function (ind, item) {
                     found = false;
@@ -152,16 +374,20 @@ $(function () {
                             }
                             break;
                         case "email":
-                            dataElem = prepareField($(item), "email");
-                            found = true;
-                            break;
-                        case "range":
-                            dataElem = prepareFieldRange($(item));
-                            found = true;
+                            if (prepareField($(item), "email") !== false) {
+                                dataElem = prepareField($(item), "email");
+                                found = true;
+                            }
                             break;
                         case "file":
                             if (prepareFieldFile($(item)) !== false) {
                                 dataElem = prepareFieldFile($(item));
+                                found = true;
+                            }
+                            break;
+                        case "checkbox":
+                            if (prepareFieldCheckbox($(item)) !== false) {
+                                dataElem = prepareFieldCheckbox($(item));
                                 found = true;
                             }
                             break;
@@ -173,12 +399,14 @@ $(function () {
                 });
                 if (!$.isEmptyObject(data)) {
                     pf.setDataFields = data;
+                    pf.setUrlPage = window.location.href;
+                    pf.setModalWindow = (typeForm !== "") ? true : false;
                     pf.sendDataToServer();
                 }
             }
         });
         $("body").bind("click", `#${nameForm}`, function (event) {
-            let elem = $(event.target);
+            let elem = $(event.target)[0];
             if (elem.localName === "input" && elem.type === "checkbox") {
                 if (elem.checked)
                     $(`form#${nameForm}`).find('[type="submit"]').attr("disabled", false);
@@ -186,7 +414,7 @@ $(function () {
                     $(`form#${nameForm}`).find('[type="submit"]').attr("disabled", true);
             }
         });
-    });
+    }
     function validationForm(nameForm, nameField, valueField) {
         let valid;
         let expCorrectField;
@@ -197,44 +425,55 @@ $(function () {
         }
     }
     function prepareField(elem, typeField) {
-        if (elem.val()) {
+        if (elem) {
             return {
                 type: typeField,
                 value: elem.val(),
-                required: elem.attr("required"),
-                typeField: elem.attr("data-pf-field")
+                required: elem.attr("required") ? true : false,
+                nameField: elem.attr("data-pf-field")
             };
         }
         return false;
-    }
-    function prepareFieldRange(elem) {
-        return {
-            type: "range",
-            value: elem.val(),
-            min: elem.attr("min"),
-            max: elem.attr("max"),
-            typeField: "range"
-        };
     }
     function prepareFieldFile(elem) {
-        if (($(elem)[0].files.length) > 0) {
+        if ($(elem)[0].files) {
+            if (($(elem)[0].files.length) > 0) {
+                return {
+                    type: "file",
+                    files: elem[0].files,
+                    nameField: "files"
+                };
+            }
+        }
+        return false;
+    }
+    function prepareFieldCheckbox(elem) {
+        if (elem) {
             return {
-                files: $(this)[0].files,
-                typeField: files
+                type: "checkbox",
+                value: elem[0].checked,
+                nameField: elem.attr("data-pf-field")
             };
         }
         return false;
     }
-    $("#sendMesage").click(function (e) {
-        e.preventDefault();
-        console.log("ok");
-        $.ajax({
-            type: "post",
-            url: "../php/testMail.php",
-            success: function (response) {
-                console.log(response);
-                alert("ok");
-            }
+    function emptyField(item) {
+        if (item.value !== "")
+            item.classList.add("valid");
+        else
+            item.classList.remove("valid");
+    }
+    function updateCaptcha(pf, nameForm) {
+        grecaptcha.ready(function () {
+            grecaptcha.execute('6LeNyHIUAAAAAEX7wD_srG8r17k67OOPZJwZKFjn', { action: 'homepage' }).then(function (token) {
+                let form = document.getElementById(nameForm);
+                if (form) {
+                    if (form.querySelector('[data-pf-field="recaptcha"]') !== null) {
+                        form.querySelector('[data-pf-field="recaptcha"]').value = token;
+                        pf.setRECAPTCHA = token;
+                    }
+                }
+            });
         });
-    });
+    }
 });

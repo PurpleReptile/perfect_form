@@ -1,23 +1,37 @@
 <?php
 
-require_once 'DefaultSettings.php';
-require_once 'TemplateMail.php';
+require_once __DIR__ . '/helper/TemplateMail.php';
+require_once __DIR__ . '/helper/DefaultSettings.php';
+require_once __DIR__ . '/helper/InputData.php';
 
 require_once __DIR__ . '/phpmailer/PHPMailer.php';
 require_once __DIR__ . '/phpmailer/SMTP.php';
 
 use Templates\Mail\TemplateMail;
+use Helper\InputData;
 
 class PerfectForm
 {
-    private $nameForm;          /** @var string - название формы */
-    private $tplForm;           /** @var string - шаблон формы (front-end) */
-    private $tplMessage;        /** @var string - шаблон письма */
-    private $dataForm;          /** @var array - данные формы */
-    private $message;           /** @var array - сообщение письма*/
-    private $settingsMail;      /** @var array - настройки письма */
+    // general info
+    private $nameForm;          /** @var string - name form */
+    private $errors;            /** @var array - list errors */
+    private $ownerInfo;         /** @var array - additional info for owner site */
+
+    // email
     private $email;             /** @var string - e-mail */
-    private $errors;            /** @var array - список ошибок */
+    private $msgUser;           /** @var array - text message for user */
+    private $msgOwner;          /** @var array - text message for owner */
+    private $tplForm;           /** @var string - template form (client-side) */
+    private $dataForm;          /** @var array - data from form */
+
+    // files
+    private $isUploadFiles;     /** @var bool - check uploading files to the server */
+    private $listFiles;         /** @var array - list files for uploading files to the server */
+    private $uploadedFiles;     /** @var array - list uploaded files to the server */
+    private $numberOfFiles;     /** @var integer - number of files */
+
+    // instances of a classes
+    private $InpData;
 
     public function __construct()
     {
@@ -30,24 +44,37 @@ class PerfectForm
                 self::__construct2($argv[0], $argv[1]);
                 break;
         }
-
     }
 
-    function __construct1($nameForm)
+    private function __construct1($nameForm)
     {
         $this->nameForm = $nameForm;
-        $this->message = [];
+        $this->msgUser = [];
     }
 
-    function __construct2($nameForm, $dataForm)
+    private function __construct2($dataForm, $ownerInfo)
     {
-        $this->nameForm = $nameForm;
         $this->dataForm = $dataForm;
-        $this->message = [];
+        $this->ownerInfo = $ownerInfo;
+        $this->nameForm = $ownerInfo->nameForm;
+        $this->InpData = new InputData();
+        $this->msgUser = [];
     }
 
     /**
-     * @method - получение шаблона формы
+     * @method set list files for the work
+     * @param $files - list files for additional
+     * @param int $numberOfFiles - number of files for additional
+     */
+    public function setListFiles($files, $numberOfFiles = 1)
+    {
+        $this->listFiles = $files;
+        $this->isUploadFiles = true;
+        $this->numberOfFiles = $numberOfFiles;
+    }
+
+    /**
+     * @method - getting template form
      * @return mixed
      */
     public function getTplForm()
@@ -56,16 +83,8 @@ class PerfectForm
     }
 
     /**
-     * @method string - получение шаблона письма
-     */
-    public function getTplMessage()
-    {
-        return $this->tplMessage;
-    }
-
-    /**
-     * @method - получение списка ошибок
-     * @return array
+     * @method - getting list errors
+     * @return string|array
      */
     public function getErrors()
     {
@@ -73,12 +92,21 @@ class PerfectForm
     }
 
     /**
-     * @method bool - подключение формы в проект
+     * @method - getting name form
+     * @return string
+     */
+    public function getNameForm()
+    {
+        return $this->nameForm;
+    }
+
+    /**
+     * @method bool - including form to the project
      * @return bool
      */
     public function includeForm()
     {
-        $filename = "../tmp/" . $this->nameForm . ".html";
+        $filename = "../templates/" . $this->nameForm . ".html";
         if (file_exists($filename)) {
             $this->tplForm = file_get_contents($filename);
             return true;
@@ -87,159 +115,294 @@ class PerfectForm
     }
 
     /**
-     * @method bool - отправка письма
-     * @return bool
+     * @method bool - sending message
+     * @return bool - result sending message
      */
-    public function sendMsg()
+    public function sendMessage()
     {
-        $this->validationAllFields();
+        // get settings for sending
+        if ($this->InpData->getSettingsForSubmit()) {
 
-        if (isset($this->errors))
-            return false;
+            // error with unchecked checkbox
+            $this->checkCheckbox();
+            if (isset($this->errors))
+                return false;
 
-        $this->settingsMail = $this->getSettingsForSubmit();
+            // error with required fields
+            $this->checkRequiredFields();
+            if (isset($this->errors))
+                return false;
 
-        $TemplateMail = new TemplateMail($this->message);
-        $TemplateMail->prepareTemplate();
-        $this->tplMessage = $TemplateMail->getTemplate();
+            $this->msgUser = $this->prepareValidationFields();
+            $this->msgOwner = $this->prepareOwnerData();
 
-        $headers = 'MIME-Version: 1.0' . "\r\n";
-        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+            // error with invalid fields
+            if (isset($this->errors))
+                return false;
 
-        $emailTo = (!empty($this->email)) ? $this->email : $this->settingsMail["email"]["to"];
+            // settings for user
+            $userTemplate = new TemplateMail($this->msgUser);
+            $userMsg = $userTemplate->getTemplate();
+            $userEmail = (! empty($this->email)) ? $this->email : $this->InpData->getEmailTo();
 
-//        mail($emailTo,
-//            $this->settingsMail["email"]["subject"],
-//            $msg,
-//            $headers);
+            // settings for owner
+            $ownerTemplate = new TemplateMail($this->msgUser, $this->msgOwner);
+            $ownerMsg = $ownerTemplate->getTemplate();
+            $ownerEmail = $this->InpData->getEmailOwner();
 
-//        $this->addFileReport();
-        return true;
-    }
+            // send email to user
+            if (! $this->sendPHPMailer($userEmail, $userMsg, true))
+                return false;
 
-    public function sendMsgFromMailer()
-    {
-        // Настройки
-        $mail = new \PHPMailer\PHPMailer\PHPMailer();
-        $mail->isSMTP();
-        $mail->Host = "smtp.yandex.ru";
-        $mail->SMTPAuth = true;
-        $mail->Username = "ig.poyarkoff@yandex.ru"; // Ваш логин в Яндексе. Именно логин, без @yandex.ru
-        $mail->Password = "}Br8O107#n4NWs[Ehi&6X<TRv"; // Ваш пароль
-        $mail->SMTPSecure = "ssl";
-        $mail->Port = 465;
-        $mail->setFrom("ig.poyarkoff@yandex.ru"); // Ваш Email
-        $mail->addAddress("ig.poyarkoff@yandex.ru"); // Email получателя
-
-        // Письмо
-        $mail->isHTML(true);
-        $mail->Subject = "Тестовый заголовок"; // Заголовок письма
-        $mail->Body = "Тестовое письмо от phpmailer";
-
-        $mail->send();
-    }
-
-    /**
-     * @method void - получение настройки для отправки письма
-     */
-    private function getSettingsForSubmit()
-    {
-        $dir = "../settings/";
-        $fileSettings = "";
-
-        if (file_exists($dir)) {
-            $fileSettings .= $dir . "sendForm.json";
-
-            if (file_exists($fileSettings)) {
-                $settings = file_get_contents($fileSettings);
-
-                if (!empty($settings))
-                    return json_decode($settings, true);
-                else {
-                    $this->createFileSettings($dir);
-                    return json_decode(DefaultSettings::$email, true);
-                }
-            } else
-                $this->createFileSettings($dir);
-        } else {
-            mkdir($dir, 0777, true);
-            $this->createFileSettings($dir);
+            // send email to owner
+            $this->sendPHPMailer($ownerEmail, $ownerMsg, false);
+            return true;
         }
+
         return false;
     }
 
     /**
-     * @method void - создание файла с настройками отправки письма
-     * @param string $rootPath - корневая директория для файла
+     * @method sending message with help lib by PHPMailer
+     * @param string $emailTo - to email
+     * @param string $bodyMsg - body message
+     * @param bool $isUpload - needed uploading files
+     * @return bool
      */
-    private function createFileSettings($rootPath)
+    private function sendPHPMailer($emailTo, $bodyMsg, $isUpload)
     {
-        $path = $rootPath . "sendForm.json";
-        $file = fopen($path, "w");
-        fwrite($file, DefaultSettings::$email);
-        fclose($file);
-    }
+        $mail = new \PHPMailer\PHPMailer\PHPMailer();
+        $mail->isSMTP();
+        $mail->Host = "smtp.yandex.ru";
+        $mail->SMTPAuth = true;
+        $mail->Username = $this->InpData->getSMTPUsername();
+        $mail->Password = $this->InpData->getSMTPPassword();
+        $mail->SMTPSecure = "ssl";
+        $mail->Port = 465;
+        $mail->setFrom("ig.poyarkoff@yandex.ru");
+        $mail->addAddress($emailTo); // Email получателя
 
-    /**
-     * @method void - добавление файла с содержимым письма в проект
-     */
-    private function addFileReport()
-    {
-        $dir = $_SERVER['DOCUMENT_ROOT'] . "/report_mail/";
-        $filename = date("d.m.Y-H.i") . ".txt";
+        // message
+        $mail->isHTML(true);
+        $mail->Subject = $this->InpData->getEmailSubject();
+        $mail->Body = $bodyMsg;
+        $mail->CharSet = "UTF-8";
+        $mail->Encoding = "base64";
 
-        if (!file_exists($dir))
-            mkdir($dir, 0777, true);
+        // attachment files
+        if ($this->isUploadFiles && $isUpload) {
+            $this->prepareFilesForUploading();
 
-        $file = fopen($dir . $filename, "w");
-        if ($file) {
-            foreach ($this->message as $key => $value) {
-                fwrite($file, $value["text"] . "\n");
+            // error with invalid files
+            if (isset($this->errors)) {
+                $this->errors["files"]["params"] = [
+                    "extension" => $this->InpData->getFileExtensions(),
+                    "size" => $this->InpData->getFileMaxSize()
+                ];
+                return false;
             }
 
-            fclose($file);
+            foreach ($this->uploadedFiles as $attachment)
+                $mail->addAttachment($attachment["tmpName"], $attachment["name"]);
+
         }
-    }
 
-    // TODO исправить баг с добавлением одинаковых полей даты
-    /**
-     * @method - валидация полей формы
-     */
-    private function validationAllFields()
-    {
-        foreach ($this->dataForm as $key => $item) {
+        // send mail
+        if ($mail->send()) {
 
-            $typeField = $item["typeField"];
-            $valueField = $item["value"];
+            if ($this->isUploadFiles && $isUpload)
+                $this->uploadFiles();
 
-            if (array_key_exists($typeField, DefaultSettings::VALIDATION))
-                $this->validationField(
-                    $valueField,
-                    DefaultSettings::VALIDATION[$typeField]["regexp"],
-                    $typeField,
-                    DefaultSettings::VALIDATION[$typeField]["label"]
-                );
+            return true;
         }
+
+        return false;
     }
 
     /**
-     * @method - валидация поля формы
-     * @param string $valueInp - значение поля
-     * @param string $regExp - регулярное выражение
-     * @param string $fieldName - название поля
-     * @param string $lblMsg - текст для отображения письма
+     * @method check files for corrected
+     * @param string $fname - name file
+     * @param $fsize - size file
+     * @param $ftmpName - temporary path for file
      */
-    private function validationField($valueInp, $regExp, $fieldName, $lblMsg)
+    private function checkFiles($fname, $fsize, $ftmpName)
     {
-        if (preg_match($regExp, $this->testInput($valueInp))) {
-            $this->message[$fieldName]["text"] = $lblMsg . ": " . $valueInp;
-            $this->message[$fieldName]["type"] = DefaultSettings::STYLE_P;
+        $allowedExtensions = $this->InpData->getFileExtensions();
+        $maxSize = $this->InpData->getFileMaxSize();
+
+        $fextension = pathinfo($fname, PATHINFO_EXTENSION);
+
+        if (! in_array($fextension, $allowedExtensions)) {
+            $error["errors"][] = [
+                "type" => "extension",
+                "value" => $fextension
+            ];
+        }
+
+        if ($fsize > $maxSize) {
+            $error["errors"][] = [
+                "type" => "size",
+                "value" => $maxSize
+            ];
+        }
+
+        if (empty($error)) {
+            array_push($this->uploadedFiles, [
+                "name" => $fname,
+                "tmpName" => $ftmpName,
+            ]);
         } else {
-            $this->errors["input"][$fieldName] = "Входные данные для поля \"" . $fieldName . "\" введены некорректно.";
+            $error["name"] = $fname;
+            $this->errors["files"]["listFiles"][] = $error;
         }
     }
 
     /**
+     * @method void - upload files to the server
+     */
+    private function uploadFiles()
+    {
+        date_default_timezone_set('Europe/Moscow');
+        $rootPath = $_SERVER['DOCUMENT_ROOT'] . "/report_mail/";
+        $dir = $rootPath . date("d.m.Y-H.i");
+
+        if (! file_exists($dir))
+            mkdir($dir, 0755, true);
+
+        foreach ($this->uploadedFiles as $file)
+            move_uploaded_file($file["tmpName"], $dir . "/" . $file["name"]);
+    }
+
+    /**
+     * @method - prepare for validation fields
+     */
+    private function prepareValidationFields()
+    {
+        $res = [];
+
+        foreach ($this->dataForm as $key => $value) {
+            $nameInpField = $value->nameField;
+            $valueField = $value->value;
+
+            if (! empty($valueField)) {
+
+                if (array_key_exists($nameInpField, DefaultSettings::VALIDATION)) {
+                    $resValid = $this->validationField(
+                        $valueField,
+                        DefaultSettings::VALIDATION[$nameInpField]["regexp"],
+                        $nameInpField,
+                        DefaultSettings::VALIDATION[$nameInpField]["label"]
+                    );
+
+                    if (!empty($resValid))
+                        $res[] = $resValid;
+                }
+
+            }
+        }
+        return $res;
+    }
+
+    /**
+     * @method - prepare files for uploading
+     */
+    private function prepareFilesForUploading()
+    {
+        $this->uploadedFiles = [];
+
+        if ($this->numberOfFiles > 1) {
+
+            foreach ($this->listFiles as $key => $file) {
+                $this->checkFiles(
+                    $file["name"],
+                    $file["size"],
+                    $file["tmp_name"]
+                );
+            }
+
+        } else
+            $this->checkFiles(
+                $this->listFiles["name"],
+                $this->listFiles["size"],
+                $this->listFiles["tmp_name"]
+            );
+    }
+
+    /**
+     * @method array - prepare owner data for message
+     * @return array
+     */
+    private function prepareOwnerData()
+    {
+        $ownerInfo[] =  "Название формы: " . $this->ownerInfo->nameForm;
+        $ownerInfo[] = "URL страницы: " . $this->ownerInfo->urlPage;
+
+        return $ownerInfo;
+    }
+
+    /**
+     * @method - validation field
+     * @param string $valueInp - value field
+     * @param string $regExp - regexp
+     * @param string $nameInpField - vane field
+     * @param string $lblMsg - text for message
+     * @return array $message - message with data
+     */
+    private function validationField($valueInp, $regExp, $nameInpField, $lblMsg)
+    {
+        $message = [];
+        $val = $this->testInput($valueInp);
+
+        if (preg_match($regExp, $val)) {
+            $message = $lblMsg . ": " . $valueInp;
+        } else {
+            $error["name"] = $nameInpField;
+            $error["text"] = "Входные данные для поля введены некорректно.";
+
+            if (isset(DefaultSettings::VALIDATION[$nameInpField]["example"]))
+                $corrExample = DefaultSettings::VALIDATION[$nameInpField]["example"];
+            else
+                $corrExample = "";
+
+            $error["example"] = $corrExample;
+
+            $this->errors["input"][] = $error;
+        }
+        return $message;
+    }
+
+    /**
+     * @method - check checkbox for checked
+     */
+    private function checkCheckbox()
+    {
+        if ($this->dataForm->checkbox->value === false)
+            $this->errors["checkbox"][] = "Чекбокс не нажат.";
+    }
+
+    /**
+     * @method - check required fields
+     */
+    private function checkRequiredFields()
+    {
+        $reqFields = $this->InpData->getListRequiredFields($this->nameForm);
+        $formFields = $this->dataForm;
+
+        foreach ($reqFields as $keyReq => $reqfield) {
+            foreach ($formFields as $keyForm => $formfield) {
+                if (! empty($formfield->value) && $reqfield === $formfield->nameField) {
+                    unset($reqFields[$keyReq]);
+                }
+            }
+        }
+
+        if (! empty($reqFields))
+            foreach ($reqFields as $reqfield)
+                $this->errors["required"][] = $reqfield;
+    }
+
+    /**
+     * @method - remove garbage symbols
      * @param $data
      * @return string
      */

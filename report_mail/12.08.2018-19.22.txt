@@ -1,3 +1,0 @@
-
-Фамилия: lastName
-ФИО: fullName
