@@ -1,12 +1,12 @@
 {
       "email": {
-          "to": "ig.evg.po@gmail.com",
-          "owner": "ig.poyarkoff@yandex.ru",
+          "to": "testemail@gmail.com",
+          "owner": "testemail@yandex.ru",
           "subject": "Test title"
       },
       "smtp": {
           "username": "ig.poyarkoff",
-          "password": "}Br8O107#n4NWs[Ehi&6X<TRv"
+          "password": ""
       },
       "files": {
           "extensions": ["txt", "jpg", "jpeg", "png"],
@@ -25,8 +25,8 @@
           "bsForm2": {
               "subject": "Я форма bsForm2",
               "manager": [
-                "ig.evg.po@gmail.com",
-                "ig.poyarkoff@yandex.ru"
+                "testemail@gmail.com",
+                "testemail@yandex.ru"
               ],
               "required": [
                   "firstname",
