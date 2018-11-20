@@ -6,9 +6,6 @@ class Validation {
     readonly regexpFullname = /W/;
     readonly regexpPhone = /^[\d|\s|\-]*$/;
     readonly regexpDate = /W/;
-    readonly listExamples = [
-
-    ];
 
     private nameForm: string;
     private nameField: string;
@@ -76,35 +73,32 @@ class PerfectForm {
 
     readonly typeRequestIncludeForm = "includeForm";
     readonly typeRequestSendMsg = "sendMessage";
+    readonly typeRequestCheckFiles = "checkFiles";
     readonly urlScript = '../php/main.php';
 
     private nameForm: string;           /** @var - name form */
     private dataToServer: object;       /** @var - data for sending to the server */
     private dataFields: object;         /** @var - data of fields */
-    private urlPage: string;            /** @var - url-form */
     private reCAPTCHA: string;          /** @var - google reCAPTCHA v3 */
     private isModalWindow: boolean;     /** @var - check is modal window */
 
-    set setDataFields(data: any) {
-        this.dataFields = data;
-    }
+    // info for owner
+    private urlPage: string;            /** @var - url-form */
+    private orderInfo: string;          /** @var - info about order */
 
-    set setUrlPage(url: string) {
-        this.urlPage = url;
-    }
-
-    set setRECAPTCHA(reCAPTCHA: string) {
-        this.reCAPTCHA = reCAPTCHA;
-    }
-
-    set setModalWindow(isModal: boolean) {
-        this.isModalWindow = isModal;
-    }
+    set setDataFields(data: any) { this.dataFields = data; }
+    set setUrlPage(url: string) { this.urlPage = url; }
+    set setOrderInfo(info: string) { this.orderInfo = info; }
+    set setRECAPTCHA(reCAPTCHA: string) { this.reCAPTCHA = reCAPTCHA; }
+    set setModalWindow(isModal: boolean) { this.isModalWindow = isModal; }
 
     constructor(nameForm: string) {
         this.nameForm = nameForm;
         this.urlPage = "";
+        this.orderInfo = "";
+
         this.reCAPTCHA = "";
+        this.isModalWindow = false;
 
         this.dataToServer = {};
         this.dataFields = {};
@@ -117,18 +111,18 @@ class PerfectForm {
             data: `&nameForm=${this.nameForm}&typeRequest=${this.typeRequestIncludeForm}`,
             dataType: 'json',
             success: this.includeFormSuccess,
-            error: this.includeFormError,
+            error: this.errorResponse,
         });
     }
 
     private includeFormSuccess(response: any): any {
         if (response.status == "success") {
-            let modal: any = {};
-            let formContainer: any = {};
             let btnClose: any = {};
+            let pfModalId: string = `pf-modal-${response.nameForm} #datetimepicker`;
 
-            modal = document.createElement("div");
-            formContainer = document.createElement("div");
+            let modal = document.createElement("div");
+            let formContainer = document.createElement("div");
+
             formContainer.classList.add("pf-container");
             formContainer.innerHTML = '<span class="btn-close">x</span>' + response.form;
 
@@ -136,33 +130,33 @@ class PerfectForm {
             modal.setAttribute("id", `pf-modal-${response.nameForm}`);
             modal.appendChild(formContainer);
             document.body.appendChild(modal);
-            $(`#pf-modal-${response.nameForm}`).hide().fadeIn();
+            $(`#${pfModalId}`).hide().fadeIn();
 
             btnClose = modal.getElementsByClassName("btn-close")[0];
 
             // include datetimepicker
             $.datetimepicker.setLocale('ru');
-            $('#datetimepicker').datetimepicker({
+            $(`#${pfModalId}`).datetimepicker({
                 format: 'd/m/Y H:i',
                 formatDate: 'd.m.y',
                 formatTime: 'H:i',
-                step: 5
+                step: 30
             });
 
             btnClose.onclick = function() {
                 $(`#pf-modal-${response.nameForm}`).fadeOut(function() {
+                    modal.nextSibling.remove();
                     modal.remove();
-                    if (document.getElementsByClassName("xdsoft_datetimepicker")[0])
-                        document.getElementsByClassName("xdsoft_datetimepicker")[0].remove();
+                    $(`#${pfModalId}`).datetimepicker('destroy');
                 });
             }
 
             window.onclick = function(event) {
                 if (event.target == modal) {
                     $(`#pf-modal-${response.nameForm}`).fadeOut(function() {
+                        modal.nextSibling.remove();
                         modal.remove();
-                        if (document.getElementsByClassName("xdsoft_datetimepicker")[0])
-                            document.getElementsByClassName("xdsoft_datetimepicker")[0].remove();
+                        $(`#${pfModalId}`).datetimepicker('destroy');
                     });
                 }
             }
@@ -174,15 +168,11 @@ class PerfectForm {
         console.log(response);
     }
 
-    private includeFormError(jqXHR: any): any {
-        console.log(jqXHR);
-    }
-
     public sendDataToServer(): any {
 
         let formData = new FormData();
         let data: any = {};
-        let ownerInfo: any = {};
+        let ownerInfo: any;
         let numberOfFiles: number = 0;
 
         $.each(this.dataFields, function(ind: number, val: any) {
@@ -191,7 +181,6 @@ class PerfectForm {
                 formData.append("numberOfFiles", numberOfFiles);
 
                 if (numberOfFiles > 1) {
-
                     for (let indFile = 0; indFile < numberOfFiles; indFile++)
                         formData.append("file[]", this.files[indFile]);
 
@@ -209,7 +198,8 @@ class PerfectForm {
 
         ownerInfo = {
             "nameForm": this.nameForm,
-            "urlPage": this.urlPage
+            "urlPage": this.urlPage,
+            "order": this.orderInfo,
         };
 
         formData.append("data", JSON.stringify(data));
@@ -227,7 +217,7 @@ class PerfectForm {
             contentType: false,
             processData: false,
             success: this.sendDataToServerSuccess,
-            error: this.sendDataToServerError,
+            error: this.errorResponse,
         });
     }
 
@@ -243,6 +233,8 @@ class PerfectForm {
             case "success":
                 let idForm = response.nameForm;
                 let form: any = {};
+                let inpFile = document.querySelector(`#${response.nameForm} input[type="file"]`);
+                let parentElemInpFile = inpFile.parentNode.parentNode;
 
                 if (response.isModalWindow) {
                     idForm = `pf-modal-${response.nameForm}`;
@@ -271,6 +263,12 @@ class PerfectForm {
                         let exampElem = form[ind].parentElement.getElementsByClassName("example")[0];
                         if (exampElem)
                             form[ind].parentElement.removeChild(exampElem);
+                    }
+
+                    // remove all elements for file upload
+                    parentElemInpFile = inpFile.parentNode.parentNode;
+                    while (parentElemInpFile.childNodes.length > 2) {
+                        parentElemInpFile.removeChild(parentElemInpFile.lastChild);
                     }
                 }
 
@@ -352,38 +350,92 @@ class PerfectForm {
 
                 // add error message about invalid files
                 if (response.errors.hasOwnProperty("files")) {
-                    listFiles = response.errors.files.listFiles;
-                    listParams = response.errors.files.params;
+                    // reference info
+                    const limitFiles = response.reference.limit;
+                    const maxSizeFiles = response.reference.maxSize / 1024 / 1024;
+                    const listExtensionFiles = response.reference.extensions.join(', ');
 
-                    listFiles.forEach( (item: any) => {
+                    let counterFiles = document.createElement("span");
+                    let infoAboutFiles = document.createElement('ol');
+                    let filesReference = document.createElement("div");
 
-                        if (item.errors.length > 0) {
-                            warnMsg += `<br>В файле <b>${item.name}</b>:`;
-                            warnMsg += `<ul>`;
-                            item.errors.forEach( (itemError: any, valError: number, item.errors: any) => {
-                                if (itemError.type === "extension")
-                                    warnMsg += `<li>Ошибка расширения файла (текущее <b>${itemError.value}</b>).</li>`;
+                    let inpFile = document.querySelector(`#${response.nameForm} input[type="file"]`);
+                    let parentElemInpFile = inpFile.parentNode.parentNode;
 
-                                if (itemError.type === "size") {
-                                    let currSize = itemError.value;
-                                    currSize /= 1024 / 1024;
-                                    warnMsg += `<li>Превышен допустимый размер файла (текущий <b>${Math.round((currSize * 100) / 100)} Мб)</b>.</li>`;
-                                }
+                    counterFiles.textContent = ` файлов - ${response.reference.numberOfFiles}`;
+
+                    switch (response.status) {
+                        case "success":
+                            response.listFiles.forEach((file: any) => {
+                                infoAboutFiles.innerHTML += `<li class="valid">Файл ${file.name} успешно загружен!</li>`;
                             });
-                            warnMsg += `</ul>`;
-                        }
-                    });
+                            break;
 
-                    warnMsg += "</br> Доступные расширения: <b>[ ";
+                        case "error":
+                            const textErrorExtenstion = "неверное расширение";
+                            const textErrorSize = `размер больше ${maxSizeFiles} Мб`;
+                            let error: number = 0;
 
-                    listParams.extension.forEach( (item: any) => {
-                       warnMsg += `${item} `;
-                    });
+                            if (response.errors.hasOwnProperty("limitFiles")) {
+                                infoAboutFiles.innerHTML = `<p class="invalid">Превышен лимит загружаемых файлов!</p>`;
 
-                    warnMsg += "]</b>";
-                    warnMsg += `</br>Максимальный размер файла: <b>${listParams.size / 1024 / 1024} Мб</b>`;
+                            } else {
+                                let isFind = false;
+                                // get list files with errors
+                                response.listFiles.forEach((file: any) => {
+                                    isFind = false;
+                                    response.errors.files.forEach((elem: any) => {
+                                        if (elem["name"] === file.name) {
+                                            isFind = true;
+                                            return;
+                                        }
+                                    });
 
-                    textSweetAlert = `Ваше сообщение не может быть отправлено, так как в файлах найдены следующие ошибки: ${warnMsg}`;
+                                    if (isFind === false)
+                                        infoAboutFiles.innerHTML += `<li class="valid">Файл ${file.name} успешно загружен!</li>`;
+                                });
+
+                                response.errors.files.forEach((descError: any) => {
+                                    error = 0;
+                                    descError.errors.forEach((typeError: any) => {
+                                        if (typeError.type === "extension") error += 1;
+                                        if (typeError.type === "size") error += 2;
+                                    });
+
+                                    switch (error) {
+                                        case 1:
+                                            infoAboutFiles.innerHTML += `<li class="invalid">Файл ${descError.name}: ${textErrorExtenstion}.</li>`;
+                                            break;
+
+                                        case 2:
+                                            infoAboutFiles.innerHTML += `<li class="invalid">Файл ${descError.name}: ${textErrorSize}.</li>`;
+                                            break;
+
+                                        case 3:
+                                            infoAboutFiles.innerHTML += `<li class="invalid">Файл ${descError.name}: ${textErrorExtenstion}, ${textErrorSize}.</li>`;
+                                            break;
+                                    }
+                                });
+                            }
+                            break;
+                    }
+
+                    filesReference.innerHTML += `
+                                <div class="reference">
+                                    <p>Максимально файлов: ${limitFiles}</p>
+                                    <p>Расширения: ${listExtensionFiles}</p>
+                                    <p>Размер: <${maxSizeFiles}Мб</p>
+                                </div>`;
+
+                    // remove old elements from front-end
+                    while (parentElemInpFile.childNodes.length > 2) {
+                        parentElemInpFile.removeChild(parentElemInpFile.lastChild);
+                    }
+
+                    // add new elements to front-end
+                    parentElemInpFile.insertBefore(counterFiles, inpFile.nextSibling);
+                    parentElemInpFile.insertBefore(infoAboutFiles, inpFile.nextSibling);
+                    parentElemInpFile.insertBefore(filesReference, inpFile.nextSibling);
                 }
 
                 // add error message about reCAPTCHA
@@ -404,41 +456,165 @@ class PerfectForm {
         // console.log(response);
     }
 
-    private sendDataToServerError(jqXHR: any): any {
-        console.log(jqXHR);
+    public checkFiles(): any {
+        let formData = new FormData();
+        let numberOfFiles = 0;
+
+        $.each(this.dataFields, function(ind: number, val: any) {
+            if (this.type === "file") {
+                numberOfFiles = this.files.length;
+                formData.append("numberOfFiles", numberOfFiles);
+
+                if (numberOfFiles > 1) {
+                    for (let indFile = 0; indFile < numberOfFiles; indFile++)
+                        formData.append("file[]", this.files[indFile]);
+
+                } else
+                    formData.append("file", this.files[0]);
+            }
+        });
+
+        formData.append("nameForm", this.nameForm);
+        formData.append("typeRequest", this.typeRequestCheckFiles);
+
+        $.ajax({
+            type: 'post',
+            url: this.urlScript,
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: this.checkFilesSuccess,
+            error: this.errorResponse,
+        });
     }
 
+    private checkFilesSuccess(resp: any): any {
+        let response = JSON.parse(resp);
+
+        // reference info
+        const limitFiles = response.reference.limit;
+        const maxSizeFiles = response.reference.maxSize / 1024 / 1024;
+        const listExtensionFiles = response.reference.extensions.join(', ');
+
+        let counterFiles = document.createElement("span");
+        let infoAboutFiles = document.createElement('ol');
+        let filesReference = document.createElement("div");
+
+        let parentElemInpFile;
+        let inpFile;
+
+        counterFiles.textContent = ` файлов - ${response.reference.numberOfFiles}`;
+
+        switch (response.status) {
+            case "success":
+                response.listFiles.forEach((file: any) => {
+                    infoAboutFiles.innerHTML += `<li class="valid">Файл ${file.name} успешно загружен!</li>`;
+                });
+                break;
+
+            case "error":
+                const textErrorExtenstion = "неверное расширение";
+                const textErrorSize = `размер больше ${maxSizeFiles} Мб`;
+                let error: number = 0;
+
+                if (response.errors.hasOwnProperty("limitFiles")) {
+                    infoAboutFiles.innerHTML = `<p class="invalid">Превышен лимит загружаемых файлов!</p>`;
+
+                } else {
+                    let isFind = false;
+                    // get list files with errors
+                    response.listFiles.forEach((file: any) => {
+                        isFind = false;
+                        response.errors.files.forEach((elem: any) => {
+                            if (elem["name"] === file.name) {
+                                isFind = true;
+                                return;
+                            }
+                        });
+
+                        if (isFind === false)
+                            infoAboutFiles.innerHTML += `<li class="valid">Файл ${file.name} успешно загружен!</li>`;
+                    });
+
+                    response.errors.files.forEach((descError: any) => {
+                        error = 0;
+                        descError.errors.forEach((typeError: any) => {
+                            if (typeError.type === "extension") error += 1;
+                            if (typeError.type === "size") error += 2;
+                        });
+
+                        switch (error) {
+                            case 1:
+                                infoAboutFiles.innerHTML += `<li class="invalid">Файл ${descError.name}: ${textErrorExtenstion}.</li>`;
+                                break;
+
+                            case 2:
+                                infoAboutFiles.innerHTML += `<li class="invalid">Файл ${descError.name}: ${textErrorSize}.</li>`;
+                                break;
+
+                            case 3:
+                                infoAboutFiles.innerHTML += `<li class="invalid">Файл ${descError.name}: ${textErrorExtenstion}, ${textErrorSize}.</li>`;
+                                break;
+                        }
+                    });
+                }
+                break;
+        }
+
+        filesReference.innerHTML += `
+            <div class="reference">
+                <p>Максимально файлов: ${limitFiles}</p>
+                <p>Расширения: ${listExtensionFiles}</p>
+                <p>Размер: <${maxSizeFiles}Мб</p>
+            </div>`;
+
+
+        inpFile = document.querySelector(`#${response.nameForm} input[type="file"]`);
+
+        // remove old elements from front-end
+        parentElemInpFile = inpFile.parentNode.parentNode;
+        while (parentElemInpFile.childNodes.length > 2) {
+            parentElemInpFile.removeChild(parentElemInpFile.lastChild);
+        }
+
+        // add new elements to front-end
+        parentElemInpFile.insertBefore(counterFiles, inpFile.nextSibling);
+        parentElemInpFile.insertBefore(infoAboutFiles, inpFile.nextSibling);
+        parentElemInpFile.insertBefore(filesReference, inpFile.nextSibling);
+    }
+
+    private errorResponse(jqXHR: any): any {
+        console.log(jqXHR);
+    }
 }
 
 $(function () {
 
-    let nameForm: string = "";
-
-    // add magic for modal form
+    // add magic for the modal form
     $("[data-pf-open]").click(function () {
         let nameForm: string = $(this).data("pfOpen");
+        let btnOpen: HTMLInputElement = event.target as HTMLInputElement;
 
         if (nameForm)
-            generalMagic(nameForm, "modal");
+            generalMagic(nameForm, true, btnOpen);
     });
 
-    // add magic for form
+    // add magic for the form
     if (document.querySelector("[data-pf-form]")) {
-        nameForm = document.querySelector("[data-pf-form]").getAttribute("id");
+        let nameForm: string = (document.querySelector("[data-pf-form]") as HTMLDivElement).getAttribute("id");
         generalMagic(nameForm);
     }
 
-    function generalMagic(nameForm: string, typeForm: string = "") {
-        let captchaExist: boolean = false;
+    function generalMagic(nameForm: string, isModal: boolean = false, btnOpen = {}) {
         let pf: PerfectForm = new PerfectForm(nameForm);
 
-        if (typeForm === "modal")
+        if (isModal === true)
             pf.includeForm();
 
         $("body").unbind("submit");     // delete old bind "submit form"
         $("body").unbind("click");      // delete old bind "validation fields"
 
-        updateCaptcha(pf, nameForm);    // google reCAPTCHA
+        pf.setRECAPTCHA = updateCaptcha(nameForm);    // set google reCAPTCHA
 
         $("body").bind("click", `#${nameForm}`, function (event: any) {
 
@@ -467,12 +643,11 @@ $(function () {
             let found: boolean = false;
 
             event.preventDefault();
-            updateCaptcha(pf, nameForm);    // google reCAPTCHA
+            pf.setRECAPTCHA = updateCaptcha(nameForm);    // set google reCAPTCHA
 
             if ($(event.target).is(`form#${nameForm}`)) {
 
                 $.each($(event.target.children).find("input"), function (ind, item) {
-
                     found = false;
 
                     switch ($(this).attr('type')) {
@@ -491,8 +666,8 @@ $(function () {
                             }
                             break;
                         case "file":
-                            if (prepareFieldFile($(item)) !== false) {
-                                dataElem = prepareFieldFile($(item));
+                            if (prepareFieldFile(item) !== false) {
+                                dataElem = prepareFieldFile(item);
                                 found = true;
                             }
                             break;
@@ -510,17 +685,22 @@ $(function () {
                         data.push(dataElem);
                 }
 
-                if (!$.isEmptyObject(data)) {
+                if (! $.isEmptyObject(data)) {
                     pf.setDataFields = data;
+                    pf.setModalWindow = isModal;
+
+                    // set info about order
+                    if (isModal && btnOpen.dataset.hasOwnProperty('orderInfo'))
+                        pf.setOrderInfo = btnOpen.dataset.orderInfo;
+
                     pf.setUrlPage = window.location.href;
-                    pf.setModalWindow = (typeForm !== "") ? true : false;
 
                     pf.sendDataToServer();
                 }
             }
         });
 
-        // изменение checkbox
+        // change checkbox
         $("body").bind("click",  `#${nameForm}`, function (event: any) {
 
             let elem = $(event.target)[0];
@@ -533,6 +713,20 @@ $(function () {
                     $(`form#${nameForm}`).find('[type="submit"]').attr("disabled", true);
             }
         });
+
+        $("body").bind("change", `#${nameForm}`, function (event: any) {
+            let elem = $(event.target)[0];
+            let data = [];
+
+            // change upload file
+            if (elem.type === "file") {
+                if (prepareFieldFile(elem) !== false) {
+                    data.push(prepareFieldFile(elem));
+                    pf.setDataFields = data;
+                    pf.checkFiles();
+                }
+            }
+        })
     }
 
     // TODO: to reliaze validation fields on the fly
@@ -578,11 +772,11 @@ $(function () {
      * @param elem - element of object
      */
     function prepareFieldFile(elem: any) {
-        if ($(elem)[0].files) {
-            if (($(elem)[0].files.length) > 0) {
+        if (elem.files) {
+            if ((elem.files.length) > 0) {
                 return {
                     type: "file",
-                    files: elem[0].files,
+                    files: elem.files,
                     nameField: "files"
                 };
             }
@@ -605,25 +799,26 @@ $(function () {
         return false;
     }
 
-    function emptyField(item) {
+    function emptyField(item: HTMLInputElement) {
         if (item.value !== "")
             item.classList.add("valid");
         else
             item.classList.remove("valid");
     }
 
-    function updateCaptcha(pf: PerfectForm, nameForm: string) {
+    function updateCaptcha(nameForm: string) {
         grecaptcha.ready(function() {
-            grecaptcha.execute('6LeNyHIUAAAAAEX7wD_srG8r17k67OOPZJwZKFjn', {action: 'homepage'}).then(function(token) {
+            grecaptcha.execute('6LeNyHIUAAAAAEX7wD_srG8r17k67OOPZJwZKFjn', {action: 'homepage'}).then(function(token: string) {
                 let form = document.getElementById(nameForm);
                 if (form) {
                     if (form.querySelector('[data-pf-field="recaptcha"]') !== null) {
-                        form.querySelector('[data-pf-field="recaptcha"]').value = token;
-                        pf.setRECAPTCHA = token;
+                        (form.querySelector('[data-pf-field="recaptcha"]') as HTMLInputElement).value = token;
+                        return token;
                     }
                 }
             });
         });
+        return "";
     }
 
 

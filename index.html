@@ -24,7 +24,7 @@
 
     <div style="display: flex; justify-content: center; margin: 2em 0;">
         <button class="btn btn-primary" data-pf-open="bsForm" style="margin-right: 2em;">Открыть форму bsForm</button>
-        <button class="btn btn-primary" data-pf-open="bsForm2">Открыть форму bsForm2</button>
+        <button class="btn btn-primary" data-pf-open="bsForm2" data-order-info="Введи сюда информацию о товаре">Открыть форму bsForm2</button>
     </div>
 
 
@@ -90,7 +90,7 @@
             <span class="checkmark"></span>
         </label>
 
-        <p>Выбрать файл
+        <p class="pf files">Выбрать файл
             <label class="btn btn-primary">Обзор… <input type="file" style="display: none;" tabindex="7" multiple></label>
         </p>
 
@@ -105,11 +105,11 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script>
         $.datetimepicker.setLocale('ru');
-        $('#datetimepicker').datetimepicker({
+        $('#bsFormStatic #datetimepicker').datetimepicker({
             format: 'd/m/Y H:i',
             formatDate: 'd.m.y',
             formatTime: 'H:i',
-            step: 5
+            step: 30
         });
     </script>
 

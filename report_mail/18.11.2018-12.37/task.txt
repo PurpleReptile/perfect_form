@@ -1,0 +1,25 @@
+# Задачи 
+
+* [x] передавать через параметр в кнопке, на что идет заказ (если несколько форм на товары)
+* [x] менять тему сообщения (в почту которая отправляется) от формы 
+* [x] менять email адрес получателя для определенных форм
+4. визуальное отображение нескольких прикрепляемых файлов
+
+
+host: demo71.ru 
+login: form@demo71.ru 
+pass: cDa0531Zd
+
+
+6Lc8hXkUAAAAANi8BY2qDKOWTs5HjvW5sOr1J8nu
+
+
+"email": {
+        "to": "marduh.top@yandex.ru",
+        "owner": "marduh.top@gmail.com",
+        "subject": "Форма обратной связи"
+    },
+    "smtp": {
+        "username": "marduh-music",
+        "password": "vQ7Bc2YSeN5"
+    },

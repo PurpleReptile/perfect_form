@@ -6,10 +6,7 @@ class InputData
 {
     private $settings;
 
-    public function __construct()
-    {
-
-    }
+    public function __construct() {}
 
     // get email settings
     public function getEmailTo() { return $this->settings["email"]["to"]; }
@@ -23,11 +20,25 @@ class InputData
     // get files settings
     public function getFileExtensions() { return $this->settings["files"]["extensions"]; }
     public function getFileMaxSize() { return $this->settings["files"]["max_size"]; }
+    public function getFileLimit() { return $this->settings["files"]["limit"]; }
 
-    // get for settings
     public function getListRequiredFields($nameForm)
     {
         return $this->settings["form"][$nameForm]["required"];
+    }
+
+    public function getEmailManagers($nameForm)
+    {
+        if (isset($this->settings["form"][$nameForm]["manager"]))
+            return $this->settings["form"][$nameForm]["manager"];
+        return "";
+    }
+
+    public function getFormSubject($nameForm)
+    {
+        if (isset($this->settings["form"][$nameForm]["subject"]))
+            return $this->settings["form"][$nameForm]["subject"];
+        return "";
     }
 
     /**

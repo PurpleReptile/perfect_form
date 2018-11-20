@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: i.poyarkov
- * Date: 30/08/18
- * Time: 9:43 AM
- */
 
 class PrepareDataToServer
 {
@@ -29,9 +23,7 @@ class PrepareDataToServer
         $this->response[$type] =  $value;
     }
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     /**
      * @method - getting content form for project
@@ -66,11 +58,8 @@ class PrepareDataToServer
 
         // adding files to send
         if ($numberOfFiles > 0) {
-
-            if ($numberOfFiles > 1)
-                $files["file"] = $this->reArrayFiles($files["file"]);
-
-            $pf->setListFiles($files["file"], $numberOfFiles);
+            $listFiles = ($numberOfFiles > 1) ? $this->reArrayFiles($files["file"]) : [$files["file"]];
+            $pf->setListFiles($listFiles, $numberOfFiles);
         }
 
         if ($pf->sendMessage()) {
@@ -102,5 +91,53 @@ class PrepareDataToServer
         }
 
         return $file_ary;
+    }
+
+    /**
+     * @method - check upload files to the server
+     * @param string $nameForm - name form
+     * @param object $files - list files for uploading
+     * @param int $numberOfFiles - number of files
+     */
+    public function checkFiles($nameForm, $files, $numberOfFiles)
+    {
+        $refAboutFiles = true;
+        $pf = new PerfectForm($nameForm);
+
+        // adding files for checking
+        if ($numberOfFiles > 0) {
+
+            $listFiles = ($numberOfFiles > 1) ? $this->reArrayFiles($files["file"]) : [$files["file"]];
+            $pf->setListFiles($listFiles, $numberOfFiles);
+
+            if ($pf->checkFilesLimit()) {
+                $pf->prepareFilesForUploading();
+
+                if ( !$pf->getErrors()) {
+                    $this->response["status"] = DefaultSettings::STATUS_SUCCESS;
+
+                } else {
+                    $this->response["status"] = DefaultSettings::STATUS_ERROR;
+                    $this->response["errors"] = $pf->getErrors();
+                }
+
+            } else {
+                $this->response["status"] = DefaultSettings::STATUS_ERROR;
+                $this->response["errors"] = $pf->getErrors();
+            }
+        } else
+            $refAboutFiles = false;
+
+        // addition info about files
+        if ($refAboutFiles === true) {
+            $this->response["reference"] = [
+                "limit" => $pf->getFileLimit(),
+                "maxSize" => $pf->getFileMaxSize(),
+                "extensions" => $pf->getFileExtensions(),
+                "numberOfFiles" => $numberOfFiles
+            ];
+            $this->response["listFiles"] = $listFiles;
+            $this->response["nameForm"] = $nameForm;
+        }
     }
 }

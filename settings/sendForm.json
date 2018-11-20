@@ -1,36 +1,43 @@
 {
-        "email": {
-            "to": "ig.poyarkoff@yandex.ru",
-            "owner": "ig.evg.po@gmail.com",
-            "subject": "Test title"
-        },
-        "smtp": {
-            "username": "ig.poyarkoff",
-            "password": ""
-        },
-        "files": {
-            "extensions": ["txt", "jpg", "jpeg", "png"],
-            "max_size": "2097152"
-        },
-        "form": {
-            "bsForm": {
-                "required": [
-                    "firstname",
-                    "surname",
-                    "fullname",
-                    "email"
-                ]
-            },
-            "bsForm2": {
-                "required": [
-                    "firstname",
-                    "email"
-                ]
-            },
-            "bsFormStatic": {
-                "required": [
-                    "firstname",
-                    "email"
-                ]
-            }
-        }}
+      "email": {
+          "to": "ig.evg.po@gmail.com",
+          "owner": "ig.poyarkoff@yandex.ru",
+          "subject": "Test title"
+      },
+      "smtp": {
+          "username": "ig.poyarkoff",
+          "password": "}Br8O107#n4NWs[Ehi&6X<TRv"
+      },
+      "files": {
+          "extensions": ["txt", "jpg", "jpeg", "png"],
+          "max_size": 2097152,
+          "limit": 2
+      },
+      "form": {
+          "bsForm": {
+              "required": [
+                  "firstname",
+                  "surname",
+                  "fullname",
+                  "email"
+              ]
+          },
+          "bsForm2": {
+              "subject": "Я форма bsForm2",
+              "manager": [
+                "ig.evg.po@gmail.com",
+                "ig.poyarkoff@yandex.ru"
+              ],
+              "required": [
+                  "firstname",
+                  "email"
+              ]
+          },
+          "bsFormStatic": {
+              "required": [
+                  "firstname",
+                  "email"
+              ]
+          }
+      }
+}
